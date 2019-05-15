@@ -9,7 +9,7 @@ You should
   - Make sure there is adequate test coverage.
   - Make sure all code is clean and follows best practices 
   
-When finished, make a pull request against the master branch in your clone.
+When finished, make a pull request against the master branch in your clone and send us a link to your repo.
 
 All joking aside, there is no need to finish this in the span of a lunch hour. 
 
