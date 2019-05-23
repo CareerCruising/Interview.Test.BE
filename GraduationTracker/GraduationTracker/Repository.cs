@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GraduationTracker
+﻿namespace GraduationTracker
 {
     public class Repository
     {
@@ -13,7 +7,7 @@ namespace GraduationTracker
             var students = GetStudents();
             Student student = null;
 
-            for (int i = 0; i < students.Length; i++)
+            for (var i = 0; i < students.Length; i++)
             {
                 if (id == students[i].Id)
                 {
@@ -28,7 +22,7 @@ namespace GraduationTracker
             var diplomas = GetDiplomas();
             Diploma diploma = null;
 
-            for (int i = 0; i < diplomas.Length; i++)
+            for (var i = 0; i < diplomas.Length; i++)
             {
                 if (id == diplomas[i].Id)
                 {
@@ -44,7 +38,7 @@ namespace GraduationTracker
             var requirements = GetRequirements();
             Requirement requirement = null;
 
-            for (int i = 0; i < requirements.Length; i++)
+            for (var i = 0; i < requirements.Length; i++)
             {
                 if (id == requirements[i].Id)
                 {
@@ -63,19 +57,19 @@ namespace GraduationTracker
                 {
                     Id = 1,
                     Credits = 4,
-                    Requirements = new int[]{100,102,103,104}
+                    Requirements = new[]{100,102,103,104}
                 }
             };
         }
 
         public static Requirement[] GetRequirements()
-        {   
-                return new[]
-                {
-                    new Requirement{Id = 100, Name = "Math", MinimumMark=50, Courses = new int[]{1}, Credits=1 },
-                    new Requirement{Id = 102, Name = "Science", MinimumMark=50, Courses = new int[]{2}, Credits=1 },
-                    new Requirement{Id = 103, Name = "Literature", MinimumMark=50, Courses = new int[]{3}, Credits=1},
-                    new Requirement{Id = 104, Name = "Physichal Education", MinimumMark=50, Courses = new int[]{4}, Credits=1 }
+        {
+            return new[]
+            {
+                    new Requirement{Id = 100, Name = "Math", MinimumMark=50, CourseId = 1, Credits=1 },
+                    new Requirement{Id = 102, Name = "Science", MinimumMark=50, CourseId = 2, Credits=1 },
+                    new Requirement{Id = 103, Name = "Literature", MinimumMark=50, CourseId = 3, Credits=1},
+                    new Requirement{Id = 104, Name = "Physichal Education", MinimumMark=50, CourseId = 4, Credits=1 }
                 };
         }
         private static Student[] GetStudents()
@@ -85,7 +79,7 @@ namespace GraduationTracker
                new Student
                {
                    Id = 1,
-                   Courses = new Course[]
+                   Courses = new[]
                    {
                         new Course{Id = 1, Name = "Math", Mark=95 },
                         new Course{Id = 2, Name = "Science", Mark=95 },
@@ -96,7 +90,7 @@ namespace GraduationTracker
                new Student
                {
                    Id = 2,
-                   Courses = new Course[]
+                   Courses = new[]
                    {
                         new Course{Id = 1, Name = "Math", Mark=80 },
                         new Course{Id = 2, Name = "Science", Mark=80 },
@@ -107,7 +101,7 @@ namespace GraduationTracker
             new Student
             {
                 Id = 3,
-                Courses = new Course[]
+                Courses = new[]
                 {
                     new Course{Id = 1, Name = "Math", Mark=50 },
                     new Course{Id = 2, Name = "Science", Mark=50 },
@@ -118,7 +112,7 @@ namespace GraduationTracker
             new Student
             {
                 Id = 4,
-                Courses = new Course[]
+                Courses = new[]
                 {
                     new Course{Id = 1, Name = "Math", Mark=40 },
                     new Course{Id = 2, Name = "Science", Mark=40 },
