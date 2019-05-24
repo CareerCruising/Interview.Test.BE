@@ -1,65 +1,79 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Linq;
 
 namespace GraduationTracker
 {
     public partial class GraduationTracker
     {   
-        public Tuple<bool, STANDING>  HasGraduated(Diploma diploma, Student student)
+        public bool HasGraduated(Diploma diploma, Student student)
         {
-            var credits = 0;
-            var average = 0;
-        
-            for(int i = 0; i < diploma.Requirements.Length; i++)
-            {
-                for(int j = 0; j < student.Courses.Length; j++)
-                {
-                    var requirement = Repository.GetRequirement(diploma.Requirements[i]);
+            double totalMarks = 0;
 
-                    for (int k = 0; k < requirement.Courses.Length; k++)
+            foreach (int requirementID in diploma.Requirements)
+            {
+                Requirement requirement = Repository.GetRequirement(requirementID);
+
+                foreach (Course course in student.Courses)
+                {
+                    if (requirement.Courses.Contains(course.Id))
                     {
-                        if (requirement.Courses[k] == student.Courses[j].Id)
-                        {
-                            average += student.Courses[j].Mark;
-                            if (student.Courses[j].Mark > requirement.MinimumMark)
-                            {
-                                credits += requirement.Credits;
-                            }
-                        }
+                        totalMarks += course.Mark;
                     }
                 }
             }
 
-            average = average / student.Courses.Length;
+            double averageMarks = totalMarks / student.Courses.Length;
 
-            var standing = STANDING.None;
-
-            if (average < 50)
-                standing = STANDING.Remedial;
-            else if (average < 80)
-                standing = STANDING.Average;
-            else if (average < 95)
-                standing = STANDING.MagnaCumLaude;
-            else
-                standing = STANDING.MagnaCumLaude;
+            Standing standing = GetStanding(averageMarks);
+            bool hasCredits = HasCredits(diploma, student);
 
             switch (standing)
             {
-                case STANDING.Remedial:
-                    return new Tuple<bool, STANDING>(false, standing);
-                case STANDING.Average:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.SumaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.MagnaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
-
+                case Standing.Remedial:
+                    return false;
+                case Standing.Average:
+                    return hasCredits;
+                case Standing.SumaCumLaude:
+                    return hasCredits;
+                case Standing.MagnaCumLaude:
+                    return hasCredits;
                 default:
-                    return new Tuple<bool, STANDING>(false, standing);
+                    return false;
             } 
+        }
+
+        public bool HasCredits(Diploma diploma, Student student)
+        {
+            int credits = 0;
+
+            foreach (int requirementID in diploma.Requirements)
+            {
+                Requirement requirement = Repository.GetRequirement(requirementID);
+                
+                foreach (Course course in student.Courses)
+                {
+                    if (requirement.Courses.Contains(course.Id) && course.Mark >= requirement.MinimumMark)
+                    {
+                        credits += requirement.Credits;
+                    }
+                }
+            }
+
+            return credits >= diploma.Credits;
+        }
+
+        public Standing GetStanding(double average)
+        {
+            Standing currentStanding = Standing.None;
+            if (average < 50)
+                currentStanding = Standing.Remedial;
+            else if (average < 80)
+                currentStanding = Standing.Average;
+            else if (average < 95)
+                currentStanding = Standing.MagnaCumLaude;
+            else
+                currentStanding = Standing.SumaCumLaude;
+
+            return currentStanding;
         }
     }
 }
