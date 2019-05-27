@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{3F941A8A-25C9-4A01-83AB-0393C50BB1CF}</ProjectGuid>
+    <ProjectGuid>{E1061CFC-B864-4C2E-B40E-166776F6DC61}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GraduationTracker</RootNamespace>
-    <AssemblyName>GraduationTracker</AssemblyName>
+    <RootNamespace>GraduationTracker.BLL</RootNamespace>
+    <AssemblyName>GraduationTracker.BLL</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -40,14 +40,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="GraduationTracker.cs" />
+    <Compile Include="BDiploma.cs" />
+    <Compile Include="BLog.cs" />
+    <Compile Include="BRequirement.cs" />
+    <Compile Include="BStudent.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\BLL\GraduationTracker.BLL\GraduationTracker.BLL.csproj">
-      <Project>{e1061cfc-b864-4c2e-b40e-166776f6dc61}</Project>
-      <Name>GraduationTracker.BLL</Name>
+    <ProjectReference Include="..\..\DAL\GraduationTracker.DAL\GraduationTracker.DAL.csproj">
+      <Project>{d5f679bc-554d-4499-bcb5-50c6b8fe6673}</Project>
+      <Name>GraduationTracker.DAL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DML\GraduationTracker.DML\GraduationTracker.DML.csproj">
+    <ProjectReference Include="..\..\DML\GraduationTracker.DML\GraduationTracker.DML.csproj">
       <Project>{7e2cf9ed-782a-4b11-81ae-5694f9a0912d}</Project>
       <Name>GraduationTracker.DML</Name>
     </ProjectReference>

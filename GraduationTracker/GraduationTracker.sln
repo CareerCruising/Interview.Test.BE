@@ -1,11 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27004.2006
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraduationTracker", "GraduationTracker\GraduationTracker.csproj", "{3F941A8A-25C9-4A01-83AB-0393C50BB1CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraduationTracker.Tests.Unit", "GraduationTracker.Tests.Unit\GraduationTracker.Tests.Unit.csproj", "{32D5A0F1-FBA7-4A90-AC86-80E14713D161}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraduationTracker.DML", "DML\GraduationTracker.DML\GraduationTracker.DML.csproj", "{7E2CF9ED-782A-4B11-81AE-5694F9A0912D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraduationTracker.BLL", "BLL\GraduationTracker.BLL\GraduationTracker.BLL.csproj", "{E1061CFC-B864-4C2E-B40E-166776F6DC61}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GraduationTracker.DAL", "DAL\GraduationTracker.DAL\GraduationTracker.DAL.csproj", "{D5F679BC-554D-4499-BCB5-50C6B8FE6673}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +27,18 @@ Global
 		{32D5A0F1-FBA7-4A90-AC86-80E14713D161}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32D5A0F1-FBA7-4A90-AC86-80E14713D161}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32D5A0F1-FBA7-4A90-AC86-80E14713D161}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E2CF9ED-782A-4B11-81AE-5694F9A0912D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E2CF9ED-782A-4B11-81AE-5694F9A0912D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E2CF9ED-782A-4B11-81AE-5694F9A0912D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E2CF9ED-782A-4B11-81AE-5694F9A0912D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E1061CFC-B864-4C2E-B40E-166776F6DC61}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E1061CFC-B864-4C2E-B40E-166776F6DC61}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E1061CFC-B864-4C2E-B40E-166776F6DC61}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E1061CFC-B864-4C2E-B40E-166776F6DC61}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5F679BC-554D-4499-BCB5-50C6B8FE6673}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5F679BC-554D-4499-BCB5-50C6B8FE6673}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5F679BC-554D-4499-BCB5-50C6B8FE6673}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5F679BC-554D-4499-BCB5-50C6B8FE6673}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
