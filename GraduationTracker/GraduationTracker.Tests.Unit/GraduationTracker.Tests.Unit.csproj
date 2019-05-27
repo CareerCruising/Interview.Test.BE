@@ -55,6 +55,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DML\GraduationTracker.DML\GraduationTracker.DML.csproj">
+      <Project>{7e2cf9ed-782a-4b11-81ae-5694f9a0912d}</Project>
+      <Name>GraduationTracker.DML</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GraduationTracker\GraduationTracker.csproj">
       <Project>{3f941a8a-25c9-4a01-83ab-0393c50bb1cf}</Project>
       <Name>GraduationTracker</Name>

@@ -1,65 +1,69 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GraduationTracker.BLL;
+using GraduationTracker.DML;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GraduationTracker
 {
     public partial class GraduationTracker
-    {   
-        public Tuple<bool, STANDING>  HasGraduated(Diploma diploma, Student student)
+    {
+        /// <summary>
+        /// Check if the Student has been graduated
+        /// </summary>
+        /// <param name="diploma">Diploma to match with student courses</param>
+        /// <param name="student">Student information</param>
+        /// <returns>Tuple informing has graduated/Standing/Credits</returns>
+        public Tuple<bool, STANDING, int> HasGraduated(Diploma diploma, Student student)
         {
-            var credits = 0;
+            bool graduated = false;
+            int credits = 0;
             var average = 0;
-        
-            for(int i = 0; i < diploma.Requirements.Length; i++)
-            {
-                for(int j = 0; j < student.Courses.Length; j++)
-                {
-                    var requirement = Repository.GetRequirement(diploma.Requirements[i]);
 
-                    for (int k = 0; k < requirement.Courses.Length; k++)
+            foreach (Requirement iDipReq in diploma.Requirements)
+            {
+                //Get the diploma's requirement
+                Requirement reqCourse = BRequirement.GetRequirement(iDipReq.Id);
+
+                foreach (Course iStuCou in student.Courses)
+                {
+                    //Check if the current student course belongs to the diploma's requirement course
+                    if (reqCourse.Courses.SingleOrDefault(x => x.Id == iStuCou.Id) != null)
                     {
-                        if (requirement.Courses[k] == student.Courses[j].Id)
-                        {
-                            average += student.Courses[j].Mark;
-                            if (student.Courses[j].Mark > requirement.MinimumMark)
-                            {
-                                credits += requirement.Credits;
-                            }
-                        }
+                        average += iStuCou.Mark;
+
+                        if (iStuCou.Mark > reqCourse.MinimumMark)
+                            credits += reqCourse.Credits;
                     }
                 }
             }
 
-            average = average / student.Courses.Length;
+            average = average / student.Courses.Count;
 
             var standing = STANDING.None;
 
             if (average < 50)
-                standing = STANDING.Remedial;
-            else if (average < 80)
-                standing = STANDING.Average;
-            else if (average < 95)
-                standing = STANDING.MagnaCumLaude;
-            else
-                standing = STANDING.MagnaCumLaude;
-
-            switch (standing)
             {
-                case STANDING.Remedial:
-                    return new Tuple<bool, STANDING>(false, standing);
-                case STANDING.Average:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.SumaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.MagnaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
+                standing = STANDING.Remedial;
+                graduated = false;
+            }
+            else if (average < 80)
+            {
+                standing = STANDING.Average;
+                graduated = true;
+            }
+            else if (average < 95)
+            {
+                standing = STANDING.MagnaCumLaude;
+                graduated = true;
+            }
+            else
+            {
+                standing = STANDING.MagnaCumLaude;
+                graduated = true;
+            }
 
-                default:
-                    return new Tuple<bool, STANDING>(false, standing);
-            } 
+            return new Tuple<bool, STANDING, int>(graduated, standing, credits);
+             
         }
     }
 }
