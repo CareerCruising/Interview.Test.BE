@@ -13,7 +13,7 @@ namespace GraduationTracker.DAL
         /// <returns>Return Diploma object filled data by Id</returns>
         public static Diploma GetDiploma(int id)
         {
-            return GetDiplomas().Where(x => x.Id == id).SingleOrDefault(x => x.Id == id);
+            return GetDiplomas().SingleOrDefault(x => x.Id == id);
         }
 
         /// <summary>

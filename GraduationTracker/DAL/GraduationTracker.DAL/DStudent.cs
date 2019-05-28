@@ -14,7 +14,7 @@ namespace GraduationTracker.DAL
         /// <returns>Return Student object filled data by Id</returns>
         public static Student GetStudent(int id)
         {
-            return GetStudents().Where(x => x.Id == id).SingleOrDefault(x => x.Id == id);
+            return GetStudents().SingleOrDefault(x => x.Id == id);
         }
 
         /// <summary>

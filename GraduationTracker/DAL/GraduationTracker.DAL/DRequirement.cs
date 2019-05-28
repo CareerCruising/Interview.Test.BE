@@ -13,7 +13,7 @@ namespace GraduationTracker.DAL
         /// <returns>Return Requirement object filled data by Id</returns>
         public static Requirement GetRequirement(int id)
         {
-            return GetRequirements().Where(x => x.Id == id).SingleOrDefault(x => x.Id == id);
+            return GetRequirements().SingleOrDefault(x => x.Id == id);
         }
 
         /// <summary>
