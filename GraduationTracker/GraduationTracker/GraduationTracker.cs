@@ -46,9 +46,13 @@ namespace GraduationTracker
                 standing = STANDING.Average;
             }
             else if (average < 95)
+            {
                 standing = STANDING.MagnaCumLaude;
+            }
             else
+            {
                 standing = STANDING.MagnaCumLaude;
+            }
 
             switch (standing)
             {
