@@ -1,65 +1,59 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using GraduationTracker.Architecture.Domain.Modules;
+using GraduationTracker.Architecture.Domain.Modules.Enumerator;
+using GraduationTracker.Architecture.Domain.Modules.Repository;
 
 namespace GraduationTracker
 {
     public partial class GraduationTracker
-    {   
-        public Tuple<bool, STANDING>  HasGraduated(Diploma diploma, Student student)
+    {
+        private IRequirementRepository RequirementRepository { get; set; }
+
+        public GraduationTracker(IRequirementRepository requirementRepository)
         {
-            var credits = 0;
+            RequirementRepository = requirementRepository;
+        }
+
+        public Tuple<bool, EnumStanding> HasGraduated(Diploma diploma, Student student)
+        {
             var average = 0;
-        
-            for(int i = 0; i < diploma.Requirements.Length; i++)
+            var requirements = new List<Requirement>();
+            diploma.Requirements.ToList().ForEach(x => requirements.Add(RequirementRepository.GetRequirement(x.Id)));
+
+            student.Courses.ToList().ForEach(x =>
             {
-                for(int j = 0; j < student.Courses.Length; j++)
-                {
-                    var requirement = Repository.GetRequirement(diploma.Requirements[i]);
+                var requirement = requirements.SingleOrDefault(i => i.Courses.Count(z => z.Id == x.Id) > 0);
+                if (requirement == null) return;
+                average += x.Mark;
+            });
 
-                    for (int k = 0; k < requirement.Courses.Length; k++)
-                    {
-                        if (requirement.Courses[k] == student.Courses[j].Id)
-                        {
-                            average += student.Courses[j].Mark;
-                            if (student.Courses[j].Mark > requirement.MinimumMark)
-                            {
-                                credits += requirement.Credits;
-                            }
-                        }
-                    }
-                }
-            }
+            average = average / student.Courses.Count();
 
-            average = average / student.Courses.Length;
-
-            var standing = STANDING.None;
-
-            if (average < 50)
-                standing = STANDING.Remedial;
-            else if (average < 80)
-                standing = STANDING.Average;
-            else if (average < 95)
-                standing = STANDING.MagnaCumLaude;
-            else
-                standing = STANDING.MagnaCumLaude;
+            var standing = GetStading(average);
 
             switch (standing)
             {
-                case STANDING.Remedial:
-                    return new Tuple<bool, STANDING>(false, standing);
-                case STANDING.Average:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.SumaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.MagnaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
-
+                case EnumStanding.Remedial:
+                    return new Tuple<bool, EnumStanding>(false, standing);
+                case EnumStanding.Average:
+                    return new Tuple<bool, EnumStanding>(true, standing);
+                case EnumStanding.SumaCumLaude:
+                    return new Tuple<bool, EnumStanding>(true, standing);
+                case EnumStanding.MagnaCumLaude:
+                    return new Tuple<bool, EnumStanding>(true, standing);
                 default:
-                    return new Tuple<bool, STANDING>(false, standing);
-            } 
+                    return new Tuple<bool, EnumStanding>(false, standing);
+            }
+        }
+
+        private EnumStanding GetStading(int average)
+        {
+            if (average < 50)
+                return EnumStanding.Remedial;
+
+            return average < 80 ? EnumStanding.Average : EnumStanding.MagnaCumLaude;
         }
     }
 }

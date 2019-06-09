@@ -1,6 +1,6 @@
-﻿namespace GraduationTracker
+﻿namespace GraduationTracker.Architecture.Domain.Modules.Enumerator
 {
-    public enum STANDING
+    public enum EnumStanding
     {
         None,
         SumaCumLaude,
