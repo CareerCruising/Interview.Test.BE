@@ -8,8 +8,12 @@ namespace GraduationTracker
 {
     public class Student
     {
+        public Student()
+        {
+            Standing = STANDING.None;
+        }
         public int Id { get; set; }
-        public Course[] Courses { get; set; }
-        public STANDING Standing { get; set; } = STANDING.None;
+        public List<Course> Courses { get; set; }
+        public STANDING Standing { get; set; }  
     }
 }
