@@ -10,6 +10,6 @@ namespace GraduationTracker
     {
         public int Id { get; set; }
         public int Credits { get; set; }
-        public int[] Requirements { get; set; }
+        public List<int> Requirements { get; set; }
     }
 }

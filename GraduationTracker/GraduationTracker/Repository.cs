@@ -8,84 +8,77 @@ namespace GraduationTracker
 {
     public class Repository
     {
+
         public static Student GetStudent(int id)
         {
-            var students = GetStudents();
-            Student student = null;
-
-            for (int i = 0; i < students.Length; i++)
+            try
             {
-                if (id == students[i].Id)
-                {
-                    student = students[i];
-                }
+                return GetStudents().Where(x => x.Id == id).SingleOrDefault(x => x.Id == id);
             }
-            return student;
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(ex);
+                throw ex;
+            }
         }
 
         public static Diploma GetDiploma(int id)
         {
-            var diplomas = GetDiplomas();
-            Diploma diploma = null;
-
-            for (int i = 0; i < diplomas.Length; i++)
+            try
             {
-                if (id == diplomas[i].Id)
-                {
-                    diploma = diplomas[i];
-                }
+                return GetDiplomas().Where(x => x.Id == id).SingleOrDefault(x => x.Id == id);
             }
-            return diploma;
-
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(ex);
+                throw ex;
+            }
         }
 
         public static Requirement GetRequirement(int id)
         {
-            var requirements = GetRequirements();
-            Requirement requirement = null;
-
-            for (int i = 0; i < requirements.Length; i++)
+            try
             {
-                if (id == requirements[i].Id)
-                {
-                    requirement = requirements[i];
-                }
+                return GetRequirements().Where(x => x.Id == id).SingleOrDefault(x => x.Id == id);
             }
-            return requirement;
+            catch (Exception ex)
+            {
+                LogHelper.WriteLog(ex);
+                throw ex;
+            }
         }
 
-
-        private static Diploma[] GetDiplomas()
+        private static List<Diploma> GetDiplomas()
         {
-            return new[]
+            return new List<Diploma>
             {
                 new Diploma
                 {
                     Id = 1,
                     Credits = 4,
-                    Requirements = new int[]{100,102,103,104}
+                    Requirements = new List<int>{100,102,103,104}
                 }
             };
         }
 
-        public static Requirement[] GetRequirements()
-        {   
-                return new[]
+        public static List<Requirement> GetRequirements()
+        {
+            return new List<Requirement>
                 {
-                    new Requirement{Id = 100, Name = "Math", MinimumMark=50, Courses = new int[]{1}, Credits=1 },
-                    new Requirement{Id = 102, Name = "Science", MinimumMark=50, Courses = new int[]{2}, Credits=1 },
-                    new Requirement{Id = 103, Name = "Literature", MinimumMark=50, Courses = new int[]{3}, Credits=1},
-                    new Requirement{Id = 104, Name = "Physichal Education", MinimumMark=50, Courses = new int[]{4}, Credits=1 }
+                    new Requirement{Id = 100, Name = "Math", MinimumMark=50, Courses = new List<int> {1}, Credits=1 },
+                    new Requirement{Id = 102, Name = "Science", MinimumMark=50, Courses = new List<int>{2}, Credits=1 },
+                    new Requirement{Id = 103, Name = "Literature", MinimumMark=50, Courses = new List<int>{3}, Credits=1},
+                    new Requirement{Id = 104, Name = "Physichal Education", MinimumMark=50, Courses = new List<int>{4}, Credits=1 }
                 };
         }
-        private static Student[] GetStudents()
+        private static List<Student> GetStudents()
         {
-            return new[]
+            return new List<Student>
             {
                new Student
                {
                    Id = 1,
-                   Courses = new Course[]
+                   Courses = new List<Course>
                    {
                         new Course{Id = 1, Name = "Math", Mark=95 },
                         new Course{Id = 2, Name = "Science", Mark=95 },
@@ -96,7 +89,7 @@ namespace GraduationTracker
                new Student
                {
                    Id = 2,
-                   Courses = new Course[]
+                   Courses = new List<Course>
                    {
                         new Course{Id = 1, Name = "Math", Mark=80 },
                         new Course{Id = 2, Name = "Science", Mark=80 },
@@ -107,7 +100,7 @@ namespace GraduationTracker
             new Student
             {
                 Id = 3,
-                Courses = new Course[]
+                Courses = new List<Course>
                 {
                     new Course{Id = 1, Name = "Math", Mark=50 },
                     new Course{Id = 2, Name = "Science", Mark=50 },
@@ -118,7 +111,7 @@ namespace GraduationTracker
             new Student
             {
                 Id = 4,
-                Courses = new Course[]
+                Courses = new List<Course>
                 {
                     new Course{Id = 1, Name = "Math", Mark=40 },
                     new Course{Id = 2, Name = "Science", Mark=40 },
@@ -130,6 +123,4 @@ namespace GraduationTracker
             };
         }
     }
-
-
 }
