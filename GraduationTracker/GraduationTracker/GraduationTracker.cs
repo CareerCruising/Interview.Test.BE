@@ -38,7 +38,9 @@ namespace GraduationTracker
             var standing = STANDING.None;
 
             if (average < 50)
+            {
                 standing = STANDING.Remedial;
+            }
             else if (average < 80)
                 standing = STANDING.Average;
             else if (average < 95)
