@@ -15,10 +15,10 @@ namespace GraduationTracker
         
             for(int i = 0; i < diploma.Requirements.Length; i++)
             {
+                var requirement = Repository.GetRequirement(diploma.Requirements[i]);
+                
                 for(int j = 0; j < student.Courses.Length; j++)
                 {
-                    var requirement = Repository.GetRequirement(diploma.Requirements[i]);
-
                     for (int k = 0; k < requirement.Courses.Length; k++)
                     {
                         if (requirement.Courses[k] == student.Courses[j].Id)
