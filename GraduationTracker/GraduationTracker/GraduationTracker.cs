@@ -12,54 +12,54 @@ namespace GraduationTracker
         {
             var credits = 0;
             var average = 0;
-        
-            for(int i = 0; i < diploma.Requirements.Length; i++)
-            {
-                for(int j = 0; j < student.Courses.Length; j++)
-                {
-                    var requirement = Repository.GetRequirement(diploma.Requirements[i]);
 
-                    for (int k = 0; k < requirement.Courses.Length; k++)
+            foreach (var vRequirement in diploma.Requirements)
+            {
+                var requirement = Repository.GetRequirement(vRequirement);
+
+                foreach (var sCourse in student.Courses)
+                {
+                    foreach (var rCourse in requirement.Courses)
                     {
-                        if (requirement.Courses[k] == student.Courses[j].Id)
+                        if (rCourse == sCourse.Id)
                         {
-                            average += student.Courses[j].Mark;
-                            if (student.Courses[j].Mark > requirement.MinimumMark)
+                            average += sCourse.Mark;
+                            if (sCourse.Mark > requirement.MinimumMark)
                             {
                                 credits += requirement.Credits;
                             }
-                        }
+                        }                       
                     }
+
                 }
             }
 
-            average = average / student.Courses.Length;
+            average = average / student.Courses.Count;
 
             var standing = STANDING.None;
-
+            bool bItem = false;
             if (average < 50)
-                standing = STANDING.Remedial;
-            else if (average < 80)
-                standing = STANDING.Average;
-            else if (average < 95)
-                standing = STANDING.MagnaCumLaude;
-            else
-                standing = STANDING.MagnaCumLaude;
-
-            switch (standing)
             {
-                case STANDING.Remedial:
-                    return new Tuple<bool, STANDING>(false, standing);
-                case STANDING.Average:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.SumaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.MagnaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
+                bItem = false;
+                standing = STANDING.Remedial;
+            }
+            else if (average < 80)
+            {
+                bItem = true; 
+                standing = STANDING.Average;
+            }
+            else if (average < 95)
+            {
+                bItem = true; 
+                standing = STANDING.MagnaCumLaude;
+            }
+            else
+            {
+                bItem = true;
+                standing = STANDING.MagnaCumLaude;
+            }
 
-                default:
-                    return new Tuple<bool, STANDING>(false, standing);
-            } 
+            return new Tuple<bool, STANDING>(bItem, standing);
         }
     }
 }
