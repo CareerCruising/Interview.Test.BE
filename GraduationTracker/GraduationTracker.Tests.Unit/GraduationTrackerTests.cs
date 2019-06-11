@@ -19,8 +19,6 @@ namespace GraduationTracker.Tests.Unit
 
             // Assert
             Assert.IsTrue(result.Graduated == true);
-
-
         }
 
         [TestMethod]
@@ -40,7 +38,6 @@ namespace GraduationTracker.Tests.Unit
             Assert.IsTrue(result.Standing == Standing.SumaCumLaude);
             // I Don't know exactly how to validate it, as i don't know the business rules.
             Assert.IsTrue(result.TotalCredits > 1);
-
         }
 
 
@@ -61,7 +58,6 @@ namespace GraduationTracker.Tests.Unit
             Assert.IsTrue(result.Standing == Standing.MagnaCumLaude);
             // I Don't know exactly how to validate it, as i don't know the business rules.
             Assert.IsTrue(result.TotalCredits > 1);
-
         }
 
         [TestMethod]
@@ -80,7 +76,6 @@ namespace GraduationTracker.Tests.Unit
             Assert.IsTrue(result.Graduated == true);
             Assert.IsTrue(result.Standing == Standing.Average);
             Assert.IsTrue(result.TotalCredits > 1);
-
         }
 
         [TestMethod]
@@ -98,7 +93,6 @@ namespace GraduationTracker.Tests.Unit
             // Assert
             Assert.IsTrue(result.Graduated == false);
             Assert.IsTrue(result.Standing == Standing.Remedial);
-
         }
     }
 }
