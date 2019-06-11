@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace GraduationTracker.Tests.Unit
 {
@@ -9,80 +6,99 @@ namespace GraduationTracker.Tests.Unit
     public class GraduationTrackerTests
     {
         [TestMethod]
-        public void TestHasCredits()
+        public void StudentShouldGraduate()
         {
-            var tracker = new GraduationTracker();
+            // Arrange
+            var student = Repository.GetStudent(4);
+            //student marks 100, 100, 100, 100
+            var diploma = Repository.GetDiploma(1);
 
-            var diploma = new Diploma
-            {
-                Id = 1,
-                Credits = 4,
-                Requirements = new int[] { 100, 102, 103, 104 }
-            };
+            // Act
+            var graduationTracker = new GraduationTracker();
+            ResultGraduationTraker result = graduationTracker.HasGraduated(diploma, student);
 
-            var students = new[]
-            {
-               new Student
-               {
-                   Id = 1,
-                   Courses = new Course[]
-                   {
-                        new Course{Id = 1, Name = "Math", Mark=95 },
-                        new Course{Id = 2, Name = "Science", Mark=95 },
-                        new Course{Id = 3, Name = "Literature", Mark=95 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=95 }
-                   }
-               },
-               new Student
-               {
-                   Id = 2,
-                   Courses = new Course[]
-                   {
-                        new Course{Id = 1, Name = "Math", Mark=80 },
-                        new Course{Id = 2, Name = "Science", Mark=80 },
-                        new Course{Id = 3, Name = "Literature", Mark=80 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=80 }
-                   }
-               },
-            new Student
-            {
-                Id = 3,
-                Courses = new Course[]
-                {
-                    new Course{Id = 1, Name = "Math", Mark=50 },
-                    new Course{Id = 2, Name = "Science", Mark=50 },
-                    new Course{Id = 3, Name = "Literature", Mark=50 },
-                    new Course{Id = 4, Name = "Physichal Education", Mark=50 }
-                }
-            },
-            new Student
-            {
-                Id = 4,
-                Courses = new Course[]
-                {
-                    new Course{Id = 1, Name = "Math", Mark=40 },
-                    new Course{Id = 2, Name = "Science", Mark=40 },
-                    new Course{Id = 3, Name = "Literature", Mark=40 },
-                    new Course{Id = 4, Name = "Physichal Education", Mark=40 }
-                }
-            }
+            // Assert
+            Assert.IsTrue(result.Graduated == true);
 
 
-            //tracker.HasGraduated()
-        };
-            
-            var graduated = new List<Tuple<bool, STANDING>>();
+        }
 
-            foreach(var student in students)
-            {
-                graduated.Add(tracker.HasGraduated(diploma, student));      
-            }
+        [TestMethod]
+        public void StudentShouldGraduateWithSumaCumLaude()
+        {
+            // Arrange
+            Student student = Repository.GetStudent(4);
+            //student marks 100, 100, 100, 100
+            Diploma diploma = Repository.GetDiploma(1);
 
-            
-            Assert.IsFalse(graduated.Any());
+            // Act
+            GraduationTracker graduationTracker = new GraduationTracker();
+            ResultGraduationTraker result = graduationTracker.HasGraduated(diploma, student);
+
+            // Assert
+            Assert.IsTrue(result.Graduated == true);
+            Assert.IsTrue(result.Standing == Standing.SumaCumLaude);
+            // I Don't know exactly how to validate it, as i don't know the business rules.
+            Assert.IsTrue(result.TotalCredits > 1);
 
         }
 
 
+        [TestMethod]
+        public void StudentShouldGraduateWithMagnaCumLaude()
+        {
+            // Arrange
+            Student student = Repository.GetStudent(2);
+            //student marks 90, 90, 90, 90
+            Diploma diploma = Repository.GetDiploma(1);
+
+            // Act
+            GraduationTracker graduationTracker = new GraduationTracker();
+            ResultGraduationTraker result = graduationTracker.HasGraduated(diploma, student);
+
+            // Assert
+            Assert.IsTrue(result.Graduated == true);
+            Assert.IsTrue(result.Standing == Standing.MagnaCumLaude);
+            // I Don't know exactly how to validate it, as i don't know the business rules.
+            Assert.IsTrue(result.TotalCredits > 1);
+
+        }
+
+        [TestMethod]
+        public void StudentShouldGraduateWithAvarage()
+        {
+            // Arrange
+            Student student = Repository.GetStudent(3);
+            //student marks 70, 70, 70, 70
+            Diploma diploma = Repository.GetDiploma(1);
+                       
+            // Act
+            GraduationTracker graduationTracker = new GraduationTracker();
+            ResultGraduationTraker result = graduationTracker.HasGraduated(diploma, student);
+
+            // Assert
+            Assert.IsTrue(result.Graduated == true);
+            Assert.IsTrue(result.Standing == Standing.Average);
+            Assert.IsTrue(result.TotalCredits > 1);
+
+        }
+
+        [TestMethod]
+        public void StudentShouldNotGraduate()
+        {
+            // Arrange
+            Student student = Repository.GetStudent(1);
+            // student marks 45, 45, 45, 45
+            Diploma diploma = Repository.GetDiploma(1);
+                       
+            // Act
+            GraduationTracker graduationTracker = new GraduationTracker();
+            ResultGraduationTraker result = graduationTracker.HasGraduated(diploma, student);
+
+            // Assert
+            Assert.IsTrue(result.Graduated == false);
+            Assert.IsTrue(result.Standing == Standing.Remedial);
+
+        }
     }
 }
