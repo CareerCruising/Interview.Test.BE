@@ -40,11 +40,11 @@ namespace GraduationTracker
                     Name = "Computer Science",
                     Credits = 4,
                     Requirements = new RequirementCourses[]{
-                                                      GetRequirement(100),
-                                                      GetRequirement(102),
-                                                      GetRequirement(103),
-                                                      GetRequirement(104)
-                                                     }
+                                                              GetRequirement(100),
+                                                              GetRequirement(102),
+                                                              GetRequirement(103),
+                                                              GetRequirement(104)
+                                                             }
                 }
             };
         }
@@ -75,55 +75,53 @@ namespace GraduationTracker
         {
             return new Student[]
             {
-               new Student
-               {
-                   Id = 1,
-                   Name = "Rafael Reis",
-                   Courses = new CourseMark[]
-                   {
+                new Student
+                {
+                    Id = 1,
+                    Name = "Rafael Reis",
+                    Courses = new CourseMark[]
+                    {
                         new CourseMark{Id = 1, Name = "Math", Mark=45 },
                         new CourseMark{Id = 2, Name = "Science", Mark=45 },
                         new CourseMark{Id = 3, Name = "Literature", Mark=45 },
                         new CourseMark{Id = 4, Name = "Physichal Education", Mark=45 }
-                   }
-               },
-               new Student
-               {
-                   Id = 2,
-                   Courses = new CourseMark[]
-                   {
+                    }
+                },
+                new Student
+                {
+                    Id = 2,
+                    Courses = new CourseMark[]
+                    {
                         new CourseMark{Id = 1, Name = "Math", Mark=90 },
                         new CourseMark{Id = 2, Name = "Science", Mark=90 },
                         new CourseMark{Id = 3, Name = "Literature", Mark=90 },
                         new CourseMark{Id = 4, Name = "Physichal Education", Mark=90 }
-                   }
-               },
-            new Student
-            {
-                Id = 3,
-                Courses = new CourseMark[]
+                    }
+                },
+                new Student
                 {
-                    new CourseMark{Id = 1, Name = "Math", Mark=70 },
-                    new CourseMark{Id = 2, Name = "Science", Mark=70 },
-                    new CourseMark{Id = 3, Name = "Literature", Mark=70 },
-                    new CourseMark{Id = 4, Name = "Physichal Education", Mark=70 }
-                }
-            },
-            new Student
-            {
-                Id = 4,
-                Courses = new CourseMark[]
+                    Id = 3,
+                    Courses = new CourseMark[]
+                    {
+                        new CourseMark{Id = 1, Name = "Math", Mark=70 },
+                        new CourseMark{Id = 2, Name = "Science", Mark=70 },
+                        new CourseMark{Id = 3, Name = "Literature", Mark=70 },
+                        new CourseMark{Id = 4, Name = "Physichal Education", Mark=70 }
+                    }
+                },
+                new Student
                 {
-                    new CourseMark{Id = 1, Name = "Math", Mark=100 },
-                    new CourseMark{Id = 2, Name = "Science", Mark=100 },
-                    new CourseMark{Id = 3, Name = "Literature", Mark=100 },
-                    new CourseMark{Id = 4, Name = "Physichal Education", Mark=100 }
+                    Id = 4,
+                    Courses = new CourseMark[]
+                    {
+                        new CourseMark{Id = 1, Name = "Math", Mark=100 },
+                        new CourseMark{Id = 2, Name = "Science", Mark=100 },
+                        new CourseMark{Id = 3, Name = "Literature", Mark=100 },
+                        new CourseMark{Id = 4, Name = "Physichal Education", Mark=100 }
+                    }
                 }
-            }
 
             };
         }
     }
-
-
 }

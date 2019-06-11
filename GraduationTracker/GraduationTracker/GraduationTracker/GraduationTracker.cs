@@ -12,10 +12,10 @@ namespace GraduationTracker
             IEnumerable<RequirementCoursesMark> requirementCoursesMark = this.GetRequirementCoursesMarkData(diploma, student);
             decimal averageMark = this.GetAvarageMark(requirementCoursesMark, student);
             int totalCredit = this.GetTotalCredit(requirementCoursesMark);
-            student.Standing = GetStudentStanding(averageMark);
+            student.Standing = this.GetStudentStanding(averageMark);
 
             return new ResultGraduationTraker{
-                                                Graduated = IsGraduated(student.Standing),
+                                                Graduated = this.IsGraduated(student.Standing),
                                                 Standing = student.Standing,
                                                 TotalCredits = totalCredit
                                               };
@@ -46,7 +46,6 @@ namespace GraduationTracker
             int totalMark = requirementCourses.Select(req => req.CoursesMark.Sum(course => course.Mark)).First();
             return Math.Round((decimal)totalMark / student.Courses.Length, 2);
         }
-
 
         private int GetTotalCredit(IEnumerable<RequirementCoursesMark> requirementCourses)
         {
