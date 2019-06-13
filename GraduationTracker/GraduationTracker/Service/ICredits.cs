@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace GraduationTracker
 {
-    public class Diploma
+    public interface ICredits
     {
-        public int Id { get; set; }
-        public int Credits { get; set; }
-        public int[] Requirements { get; set; }
+        int Credits { get; set; }
     }
 }
