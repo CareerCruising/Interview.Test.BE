@@ -1,22 +1,20 @@
-A junior developer has just accomplished a task suspicously fast...and went for lunch.
-There are now unit tests breaking on the build server and only you have the skills to fix it.
+# What I've did
 
-You should 
+* Comments added to classes, methods and code logic in general
 
-  - Clone this repo
-  - Create a branch in your clone
-  - Fix the broken unit test
-  - Make sure there is adequate test coverage.
-  - Make sure all code is clean and follows best practices 
-  
-When finished, make a pull request against the master branch in your clone and send us a link to your repo.
+* All test data (diploma, student) moved from the GraduationTrackerTest class to Repository class 
+  to allow reuse for all test cases and beter separation/readability
 
-All joking aside, there is no need to finish this in the span of a lunch hour. 
+* Created more students to test different scenarios
 
-The test is so you can show us what clean code looks like. Clean it up as best you can!
+* Credit's logic modified at GraduationTracker, before, when a student achieved the minimum mark on a 
+  requirement, the credits for that requirement were accumulated but not used anywhere. Now, the credit 
+  is accumulated on student's course and can be used to check if the student has credits
 
-You will be joining a team that believes in S.O.L.I.D.D principles. We favour declaritive over imperative programming. And we generally use rich service models, with anemic domain models, which looks very much like SOA over REST.
+* Fixed the TestHasCredits() test
 
-Submissions that follow these principles will be favored since you will fit right in with the current team. If there is a part of the test that blocks you from completing it, then put some comments explaing why it was blocking, and what you would have done if the obstacle was removed.
+* Created TestHasNoCredits(), TestHasGraduated() and TestHasNotGraduated() unit tests to improve coverage
 
-Good Luck!
+* Using LINQ to query data when possible to improve readability
+
+That's all folks, best regards and thanks for this opportunity.

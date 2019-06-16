@@ -1,5 +1,8 @@
 ﻿namespace GraduationTracker
 {
+    /// <summary>
+    /// This class represents a requirement.
+    /// </summary>
     public class Requirement
     {
         public int Id { get; set; }

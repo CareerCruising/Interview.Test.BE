@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace GraduationTracker
 {
+    /// <summary>
+    /// This class represents a diploma.
+    /// </summary>
     public class Diploma
     {
         public int Id { get; set; }
