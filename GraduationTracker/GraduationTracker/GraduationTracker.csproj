@@ -40,14 +40,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Repositories\DiplomasRepository.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\Diploma.cs" />
     <Compile Include="GraduationTracker.cs" />
     <Compile Include="Models\Standing.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Repository.cs" />
+    <Compile Include="Abstraction\IDiplomasRepository.cs" />
+    <Compile Include="Abstraction\IRequirementsRepository.cs" />
+    <Compile Include="Abstraction\IStudentsRepository.cs" />
+    <Compile Include="Repositories\RequirementsRepository.cs" />
     <Compile Include="Models\Requirement.cs" />
     <Compile Include="Models\Student.cs" />
+    <Compile Include="Repositories\StudentsRepository.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
