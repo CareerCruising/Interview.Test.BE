@@ -18,15 +18,14 @@ namespace GraduationTracker
             _diplomasRepository = diplomasRepository ?? throw new ArgumentNullException(nameof(diplomasRepository));
         }
 
-        public Tuple<bool, Standing> HasGraduated(int diplomaId, int studentId)
+        public GraduationResult HasGraduated(int diplomaId, int studentId)
         {
             var diploma = _diplomasRepository.GetDiploma(diplomaId) ??
                           throw new InvalidOperationException($"Diploma with ID {diplomaId} does not exist");
 
             var student = _studentsRepository.GetStudent(studentId) ??
-                          throw new InvalidOperationException($"Student with ID {diplomaId} does not exist");
+                          throw new InvalidOperationException($"Student with ID {studentId} does not exist");
 
-            //TODO: reconsider business requirements and use this variable somewhere
             var credits = 0;
             var total = 0;
 
@@ -38,7 +37,7 @@ namespace GraduationTracker
                 foreach (var course in student.Courses.Where(x => requirement.Courses.Contains(x.Id)))
                 {
                     total += course.Mark;
-                    if (course.Mark > requirement.MinimumMark)
+                    if (course.Mark >= requirement.MinimumMark)
                     {
                         credits += requirement.Credits;
                     }
@@ -46,25 +45,34 @@ namespace GraduationTracker
             }
 
             var average = total / student.Courses.Length;
+            var standing = CalculateStanding(average);
+            var isGraduated = GetGraduationResult(standing);
 
-            Standing standing;
+            return new GraduationResult { Credits = credits, IsGraduated = isGraduated, Standing = standing };
+        }
 
-            if (average < 50)
-                standing = Standing.Remedial;
-            else if (average < 80)
-                standing = Standing.Average;
-            else
-                standing = Standing.MagnaCumLaude;
-
+        private static bool GetGraduationResult(Standing standing)
+        {
             switch (standing)
             {
                 case Standing.Average:
                 case Standing.SummaCumLaude:
                 case Standing.MagnaCumLaude:
-                    return new Tuple<bool, Standing>(true, standing);
+                    return true;
                 default:
-                    return new Tuple<bool, Standing>(false, standing);
+                    return false;
             }
+        }
+
+        private static Standing CalculateStanding(int average)
+        {
+            if (average < 50)
+                return Standing.Remedial;
+            if (average < 80)
+                return Standing.Average;
+            if (average < 95)
+                return Standing.MagnaCumLaude;
+            return Standing.SummaCumLaude;
         }
     }
 }

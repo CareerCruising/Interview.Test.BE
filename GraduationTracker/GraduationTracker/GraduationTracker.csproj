@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\GraduationResult.cs" />
     <Compile Include="Repositories\DiplomasRepository.cs" />
     <Compile Include="Models\Course.cs" />
     <Compile Include="Models\Diploma.cs" />
