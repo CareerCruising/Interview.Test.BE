@@ -7,6 +7,24 @@ namespace GraduationTracker
 {
     public partial class GraduationTracker
     {
+        // I think that was you guys wanted. I'm so desapointed with myself because i was so nervous and just could't devliver a clear code like that simple. :(
+        public IEnumerable<Student> GetStudentsPassedMath(IEnumerable<Student> students)
+        { 
+            return from student in students
+                    where student.Courses.Any(c => c.Name == "Math" && c.Mark >= 50)
+                    select student;            
+
+        }
+
+
+        public IEnumerable<Student> GetStudentsFailedScience(IEnumerable<Student> students)
+        {
+            return from student in students
+                   where student.Courses.Any(c => c.Name == "Science" && c.Mark < 50)
+                   select student;
+        }
+
+
         public ResultGraduationTraker HasGraduated(Diploma diploma, Student student)
         {
             IEnumerable<RequirementCoursesMark> requirementCoursesMark = this.GetRequirementCoursesMarkData(diploma, student);
@@ -24,13 +42,13 @@ namespace GraduationTracker
         private IEnumerable<RequirementCoursesMark> GetRequirementCoursesMarkData(Diploma diploma, Student student)
         {
             var requirementCoursesMark = (from req in diploma.Requirements
-                                          select new RequirementCoursesMark()
+                                          select new RequirementCoursesMark
                                           {
                                               MinimumMark = req.MinimumMark,
                                               Credits = req.Credits,
                                               CoursesMark = (from course in diploma.Requirements.SelectMany(reqCourse => reqCourse.Courses)
                                                              join courseStudent in student.Courses on course.Id equals courseStudent.Id
-                                                             select new CourseMark()
+                                                             select new CourseMark
                                                              {
                                                                  Id = course.Id,
                                                                  Name = course.Name,
