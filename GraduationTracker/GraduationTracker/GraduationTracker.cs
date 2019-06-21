@@ -1,4 +1,5 @@
 ﻿using System;
+using GraduationTracker.Models;
 
 namespace GraduationTracker
 {
@@ -48,7 +49,7 @@ namespace GraduationTracker
                     return new Tuple<bool, Standing>(false, standing);
                 case Standing.Average:
                     return new Tuple<bool, Standing>(true, standing);
-                case Standing.SumaCumLaude:
+                case Standing.SummaCumLaude:
                     return new Tuple<bool, Standing>(true, standing);
                 case Standing.MagnaCumLaude:
                     return new Tuple<bool, Standing>(true, standing);

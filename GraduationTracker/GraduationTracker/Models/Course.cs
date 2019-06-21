@@ -1,4 +1,4 @@
-﻿namespace GraduationTracker
+﻿namespace GraduationTracker.Models
 {
     public class Course
     {

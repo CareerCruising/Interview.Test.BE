@@ -1,4 +1,6 @@
-﻿namespace GraduationTracker
+﻿using GraduationTracker.Models;
+
+namespace GraduationTracker
 {
     public class Repository
     {
