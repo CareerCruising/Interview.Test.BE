@@ -1,6 +1,6 @@
-﻿namespace GraduationTracker
+﻿namespace GraduationTracker.Models
 {
-    public class Requirement
+    public class Requirement: IEntity
     {
         public int Id { get; set; }
         public string Name { get; set; }
