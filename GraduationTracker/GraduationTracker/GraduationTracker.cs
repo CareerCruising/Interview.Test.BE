@@ -1,65 +1,63 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GraduationTracker
 {
-    public partial class GraduationTracker
-    {   
-        public Tuple<bool, STANDING>  HasGraduated(Diploma diploma, Student student)
+    /// <summary>
+    /// The Graduation Tracker 
+    /// </summary>
+    public class GraduationTracker
+    {
+        /// <summary>
+        /// Compute the average, course creadits for a given student
+        /// </summary>
+        /// <param name="diploma">The diploma object.</param>
+        /// <param name="student">the student object.</param>
+        /// <returns>
+        /// A Tuple&lt;bool, STANDING&gt; which indicates if the student
+        /// has graduates, the standing and the credits achieved
+        /// </returns>
+        public Tuple<bool, Standing, bool>  HasGraduated(Diploma diploma, Student student)
         {
             var credits = 0;
             var average = 0;
         
-            for(int i = 0; i < diploma.Requirements.Length; i++)
+            //diploma requirement
+            foreach (var req in diploma.Requirements)
             {
-                for(int j = 0; j < student.Courses.Length; j++)
+                //student's course
+                foreach (var course in student.Courses)
                 {
-                    var requirement = Repository.GetRequirement(diploma.Requirements[i]);
-
-                    for (int k = 0; k < requirement.Courses.Length; k++)
+                    //diploma requirement
+                    var requirement = Repository.GetRequirement(req);
+                    //courses requirement
+                    foreach (var reqCourse in requirement.Courses)
                     {
-                        if (requirement.Courses[k] == student.Courses[j].Id)
+                        if (reqCourse != course.Id) continue;
+                        average += course.Mark;
+                        if (course.Mark > requirement.MinimumMark)
                         {
-                            average += student.Courses[j].Mark;
-                            if (student.Courses[j].Mark > requirement.MinimumMark)
-                            {
-                                credits += requirement.Credits;
-                            }
+                            credits += requirement.Credits;
+                            course.Credits = credits;
                         }
                     }
                 }
             }
 
+            var hasCredits = credits >= diploma.Credits;
             average = average / student.Courses.Length;
 
-            var standing = STANDING.None;
+            Tuple<bool, Standing, bool> result;
 
             if (average < 50)
-                standing = STANDING.Remedial;
+                result = new Tuple<bool, Standing, bool>(false, Standing.Remedial, hasCredits);
             else if (average < 80)
-                standing = STANDING.Average;
+                result = new Tuple<bool, Standing, bool>(true, Standing.Average, hasCredits);
             else if (average < 95)
-                standing = STANDING.MagnaCumLaude;
+                result = new Tuple<bool, Standing, bool>(true, Standing.MagnaCumLaude, hasCredits);
             else
-                standing = STANDING.MagnaCumLaude;
+                result = new Tuple<bool, Standing, bool>(true, Standing.SumaCumLaude, hasCredits);
 
-            switch (standing)
-            {
-                case STANDING.Remedial:
-                    return new Tuple<bool, STANDING>(false, standing);
-                case STANDING.Average:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.SumaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.MagnaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
-
-                default:
-                    return new Tuple<bool, STANDING>(false, standing);
-            } 
+            return result;
         }
     }
 }
