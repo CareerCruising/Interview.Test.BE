@@ -1,8 +1,6 @@
-﻿using System;
+﻿using System.Linq;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace GraduationTracker
 {
@@ -11,30 +9,14 @@ namespace GraduationTracker
         public static Student GetStudent(int id)
         {
             var students = GetStudents();
-            Student student = null;
-
-            for (int i = 0; i < students.Length; i++)
-            {
-                if (id == students[i].Id)
-                {
-                    student = students[i];
-                }
-            }
+            var student = students.SingleOrDefault(x => x.Id == id);
             return student;
         }
 
         public static Diploma GetDiploma(int id)
         {
             var diplomas = GetDiplomas();
-            Diploma diploma = null;
-
-            for (int i = 0; i < diplomas.Length; i++)
-            {
-                if (id == diplomas[i].Id)
-                {
-                    diploma = diplomas[i];
-                }
-            }
+            var diploma = diplomas.SingleOrDefault(x => x.Id == id);
             return diploma;
 
         }
@@ -42,15 +24,7 @@ namespace GraduationTracker
         public static Requirement GetRequirement(int id)
         {
             var requirements = GetRequirements();
-            Requirement requirement = null;
-
-            for (int i = 0; i < requirements.Length; i++)
-            {
-                if (id == requirements[i].Id)
-                {
-                    requirement = requirements[i];
-                }
-            }
+            var requirement = requirements.SingleOrDefault(x => x.Id == id);
             return requirement;
         }
 
@@ -126,10 +100,7 @@ namespace GraduationTracker
                     new Course{Id = 4, Name = "Physichal Education", Mark=40 }
                 }
             }
-
             };
         }
     }
-
-
 }
