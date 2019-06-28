@@ -1,4 +1,7 @@
-﻿namespace GraduationTracker
+﻿/// <summary>
+/// STANDING.cs file
+/// </summary>
+namespace GraduationTracker
 {
     public enum STANDING
     {

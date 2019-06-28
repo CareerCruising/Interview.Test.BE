@@ -1,5 +1,7 @@
 ﻿using System;
-
+/// <summary>
+/// GraduationTracker.cs file
+/// </summary>
 namespace GraduationTracker
 {
     /// <summary>
@@ -12,7 +14,7 @@ namespace GraduationTracker
         /// </summary>
         /// <param name="diploma"></param>
         /// <param name="student"></param>
-        /// <returns>Tuple, Bool, STANDING</returns>
+        /// <returns>bool, STANDING, bool</returns>
         public Tuple<bool, STANDING, bool>  HasGraduated(Diploma diploma, Student student)
         {
             var credits = 0;
@@ -24,16 +26,21 @@ namespace GraduationTracker
                 // Loop thru each course
                 foreach (var course in student.Courses)
                 {
+                    // Obtain & set requirement
                     var requirement = Repository.GetRequirement(req);
                     // Loop thru each requirement
                     foreach (var reqCourse in requirement.Courses)
                     {
+                        // If required course doesn't equal ID
                         if (reqCourse != course.Id)
                         {
+                            // Continue thru code
                             continue;
                         }
-                        // Calculate avg
+                        // Avg definition/calculation
                         average += course.Mark;
+
+                        // If the course mark is greater than the minimal mark required
                         if (course.Mark > requirement.MinimumMark)
                         {
                             // Tally credits
@@ -47,6 +54,7 @@ namespace GraduationTracker
 
             // HasCredits
             var hasCredits = credits >= diploma.Credits;
+
             // Average calculation
             average = average / student.Courses.Length;
 
@@ -55,7 +63,7 @@ namespace GraduationTracker
             // Define result
             Tuple<bool, STANDING, bool> result;
 
-            // Logic for return
+            // Logic for return (result) based on avg
             if (average < 50)
             {
                 result = new Tuple<bool, STANDING, bool>(false, STANDING.Remedial, hasCredits);
@@ -73,6 +81,7 @@ namespace GraduationTracker
                 result = new Tuple<bool, STANDING, bool>(true, STANDING.SumaCumLaude, hasCredits);
             }
 
+            // Return tuple
             return result;
         }
     }

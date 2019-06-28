@@ -3,6 +3,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 
+/// <summary>
+/// Graduation Tracker - Unit Tests
+/// </summary>
 namespace GraduationTracker.Tests.Unit
 {
     /// <summary>
@@ -28,7 +31,7 @@ namespace GraduationTracker.Tests.Unit
             Assert.IsNotNull(students, "Null students exception thrown");
 
             //tracker.HasGraduated()
-            var graduated = new List<Tuple<bool, Standing, bool>>();
+            var graduated = new List<Tuple<bool, STANDING, bool>>();
             var tracker = new GraduationTracker();
 
             // Loop thru students
@@ -40,7 +43,7 @@ namespace GraduationTracker.Tests.Unit
 
             // Throw exception if no graduates
             Assert.IsTrue(graduated.Any(), "No existing graduates exception thrown");
-            Assert.IsTrue(graduated.Any(credit => !credit.Item3, "Insufficient credit exception");
+
         }
 
         /// <summary>
@@ -50,6 +53,7 @@ namespace GraduationTracker.Tests.Unit
         public void TestIsDiploma()
         {
             var diploma = Repository.GetDiploma(1);
+            // Ensure diploma is not null
             Assert.IsNotNull(diploma, "Null diploma exception thrown");
         }
 
@@ -60,6 +64,7 @@ namespace GraduationTracker.Tests.Unit
         public void TestGetStudent()
         {
             var student = Repository.GetStudent(1);
+            // Ensure student is not null
             Assert.IsNotNull(student, "Null student exception thrown");    
         }
 
@@ -69,25 +74,29 @@ namespace GraduationTracker.Tests.Unit
         [TestMethod]
         public void TestHasGraduated()
         {
+            // Get diploma
             var diploma = Repository.GetDiploma(1);
-            Assert.IsNotNull(diploma, "Dimploma can't be null");
+            // Ensure diploma isn't null
+            Assert.IsNotNull(diploma, "Null diploma exception thrown");
 
-            //students
+            // Get students
             var students = GetStudents();
-            Assert.IsNotNull(students, "Students can't be null");
-            Assert.IsTrue(students.Any(), "Students can't be empty");
-
-            //check
-            var graduated = new List<Tuple<bool, Standing, bool>>();
+            Assert.IsNotNull(students, "Null students exception thrown");
+            
+            // Validate graduation
+            var graduated = new List<Tuple<bool, STANDING, bool>>();
             var tracker = new GraduationTracker();
 
+            // Loop thru students
             foreach (var student in students)
             {
                 graduated.Add(tracker.HasGraduated(diploma, student));
             }
 
-            Assert.IsTrue(graduated.Any(), "None graduated");
-            Assert.IsTrue(graduated.Any(x => !x.Item1), "Below average");
+            // Check to see if anyone has graduated
+            Assert.IsTrue(graduated.Any(), "Zero graduates");
+            // Check to see if any are below the average
+            Assert.IsTrue(graduated.Any(x => !x.Item1), "Under average");
         }
 
         private Student[] GetStudents()
