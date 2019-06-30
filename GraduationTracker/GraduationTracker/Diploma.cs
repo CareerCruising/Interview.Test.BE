@@ -1,15 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GraduationTracker
+﻿namespace GraduationTracker
 {
-    public class Diploma
-    {
-        public int Id { get; set; }
-        public int Credits { get; set; }
-        public int[] Requirements { get; set; }
-    }
+	public class Diploma
+	{
+		public int Id { get; set; }
+
+		/// <summary>
+		/// Amount of credits required for this Diploma?
+		/// </summary>
+		public int Credits { get; set; }
+
+		/// <summary>
+		/// Ids of the Requirements of this Diploma
+		/// </summary>
+		public int[] Requirements { get; set; }
+	}
 }
