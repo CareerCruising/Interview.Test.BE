@@ -27,13 +27,15 @@ namespace GraduationTracker
 			var courseCount = 0;
 
 			// Get all diploma requirements
-			var diplomaRequirements = diploma.Requirements.Select(id => Repository.GetRequirement(id));
+			var diplomaRequirements = diploma.Requirements
+				.Select(id => Repository.GetRequirement(id));
 
 			foreach (var requirement in diplomaRequirements)
 			{
 				var relevantCourses = GetRelevantCourses(student, requirement);
 				totalMarks += relevantCourses.Select(c => c.Mark).Sum();
 				courseCount += relevantCourses.Count();
+				// Only courses that meet the requirement's minimum mark count towards credit.
 				if (relevantCourses.Any(c => c.Mark > requirement.MinimumMark))
 				{
 					credits += requirement.Credits;
