@@ -49,5 +49,8 @@
     <Compile Include="Requirement.cs" />
     <Compile Include="Student.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Contract\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
