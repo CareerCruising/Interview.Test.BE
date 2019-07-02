@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GraduationTracker
+﻿namespace GraduationTracker.Models
 {
     public class Student
     {
@@ -14,6 +8,7 @@ namespace GraduationTracker
 
         public Student()
         {
+            Courses = new Course[] {};
             Standing = STANDING.None;
         }
     }
