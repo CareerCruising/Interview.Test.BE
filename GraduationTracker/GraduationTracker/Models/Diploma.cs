@@ -10,6 +10,7 @@ namespace GraduationTracker
     {
         public int Id { get; set; }
         public int Credits { get; set; }
-        public int[] Requirements { get; set; }
+        public IEnumerable<Requirement> Requirements { get; set; }
+        //Replaced int[] type for Requirements with IEnumerable<Requirement>
     }
 }
