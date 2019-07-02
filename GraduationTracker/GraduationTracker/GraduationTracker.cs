@@ -7,11 +7,23 @@ using System.Threading.Tasks;
 namespace GraduationTracker
 {
     public partial class GraduationTracker
-    {   
-        public Tuple<bool, STANDING>  HasGraduated(Diploma diploma, Student student)
+    {
+        /// <summary>
+        /// Evaluates whether a <paramref name="student"/> has satisfied
+        /// the requirements of <paramref name="diploma"/>
+        /// </summary>
+        /// <param name="diploma"></param>
+        /// <param name="student"></param>
+        /// <param name="standing">One of <see cref="GraduationTracker.Standing"/></param>
+        /// <returns></returns>
+        public bool HasGraduated(Diploma diploma, Student student, out STANDING standing)
         {
+            standing = STANDING.None;
             var credits = 0;
-            var average = 0;
+            var average = 0m;
+
+            if (student.Courses.Length <= 0)
+                return false;
         
             for(int i = 0; i < diploma.Requirements.Length; i++)
             {
@@ -33,33 +45,18 @@ namespace GraduationTracker
                 }
             }
 
-            average = average / student.Courses.Length;
+            average = Decimal.Divide(average, student.Courses.Length);
 
-            var standing = STANDING.None;
-
-            if (average < 50)
+            if (average < 50m)
                 standing = STANDING.Remedial;
-            else if (average < 80)
+            else if (average < 80m)
                 standing = STANDING.Average;
-            else if (average < 95)
+            else if (average < 95m)
                 standing = STANDING.MagnaCumLaude;
             else
-                standing = STANDING.MagnaCumLaude;
+                standing = STANDING.SumaCumLaude;
 
-            switch (standing)
-            {
-                case STANDING.Remedial:
-                    return new Tuple<bool, STANDING>(false, standing);
-                case STANDING.Average:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.SumaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.MagnaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
-
-                default:
-                    return new Tuple<bool, STANDING>(false, standing);
-            } 
+            return credits >= diploma.Credits;
         }
     }
 }
