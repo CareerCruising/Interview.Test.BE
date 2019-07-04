@@ -1,6 +1,5 @@
-﻿using System;
+﻿using GraduationTracker.Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
 using System.Linq;
 
 namespace GraduationTracker.Tests.Unit
@@ -9,80 +8,91 @@ namespace GraduationTracker.Tests.Unit
     public class GraduationTrackerTests
     {
         [TestMethod]
-        public void TestHasCredits()
+        public void TestHasEnoughCredits()
         {
-            var tracker = new GraduationTracker();
+            var diploma = ServiceHelper.GetDiplomaService().GetById(1);
+            var students = ServiceHelper.GetStudentService().GetAll();
 
-            var diploma = new Diploma
-            {
-                Id = 1,
-                Credits = 4,
-                Requirements = new int[] { 100, 102, 103, 104 }
-            };
-
-            var students = new[]
-            {
-               new Student
-               {
-                   Id = 1,
-                   Courses = new Course[]
-                   {
-                        new Course{Id = 1, Name = "Math", Mark=95 },
-                        new Course{Id = 2, Name = "Science", Mark=95 },
-                        new Course{Id = 3, Name = "Literature", Mark=95 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=95 }
-                   }
-               },
-               new Student
-               {
-                   Id = 2,
-                   Courses = new Course[]
-                   {
-                        new Course{Id = 1, Name = "Math", Mark=80 },
-                        new Course{Id = 2, Name = "Science", Mark=80 },
-                        new Course{Id = 3, Name = "Literature", Mark=80 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=80 }
-                   }
-               },
-            new Student
-            {
-                Id = 3,
-                Courses = new Course[]
-                {
-                    new Course{Id = 1, Name = "Math", Mark=50 },
-                    new Course{Id = 2, Name = "Science", Mark=50 },
-                    new Course{Id = 3, Name = "Literature", Mark=50 },
-                    new Course{Id = 4, Name = "Physichal Education", Mark=50 }
-                }
-            },
-            new Student
-            {
-                Id = 4,
-                Courses = new Course[]
-                {
-                    new Course{Id = 1, Name = "Math", Mark=40 },
-                    new Course{Id = 2, Name = "Science", Mark=40 },
-                    new Course{Id = 3, Name = "Literature", Mark=40 },
-                    new Course{Id = 4, Name = "Physichal Education", Mark=40 }
-                }
-            }
-
-
-            //tracker.HasGraduated()
-        };
+            var requirements = diploma.Requirements.Select(r => r.Id);
+            var hasCredits = students.Select(s => s.Requirements.Where(r => requirements.Contains(r.Id) && r.Valid).Select(r => r.Credits).Sum() >= diploma.Credits);
             
-            var graduated = new List<Tuple<bool, STANDING>>();
-
-            foreach(var student in students)
-            {
-                graduated.Add(tracker.HasGraduated(diploma, student));      
-            }
-
-            
-            Assert.IsFalse(graduated.Any());
-
+            Assert.IsTrue(hasCredits.Any());
         }
 
+        [TestMethod]
+        public void TestNotHasEnoughCredits()
+        {
+            var diploma = ServiceHelper.GetDiplomaService().GetById(1);
+            var student = ServiceHelper.GetStudentService().GetById(4);
 
+            var requirements = diploma.Requirements.Select(r => r.Id);
+            var hasEnoughCredits = student.Requirements.Where(r => requirements.Contains(r.Id) && r.Valid).Select(r => r.Credits).Sum() >= diploma.Credits;
+
+            Assert.IsFalse(hasEnoughCredits);
+        }
+
+        [TestMethod]
+        public void TestGetStudents()
+        {
+            var students = ServiceHelper.GetStudentService().GetAll();
+            Assert.IsTrue(students.Any());
+        }
+
+        [TestMethod]
+        public void TestGetNotExistStudent()
+        {
+            var student = ServiceHelper.GetStudentService().GetById(100);
+            Assert.IsNull(student);
+        }
+
+        [TestMethod]
+        public void TestGetDiplomas()
+        {
+            var diplomas = ServiceHelper.GetDiplomaService().GetAll();
+            Assert.IsTrue(diplomas.Any());
+        }
+
+        [TestMethod]
+        public void TestGetNotExistDiploma()
+        {
+            var diploma = ServiceHelper.GetDiplomaService().GetById(100);
+            Assert.IsNull(diploma);
+        }
+
+        [TestMethod]
+        public void TestGetCourses()
+        {
+            var courses = ServiceHelper.GetCourseService().GetAll();
+            Assert.IsTrue(courses.Any());
+        }
+
+        [TestMethod]
+        public void TestGetRequirements()
+        {
+            var Requirements = ServiceHelper.GetRequirementService().GetAll();
+            Assert.IsTrue(Requirements.Any());
+        }
+        [TestMethod]
+        public void TestHasStudentGraduated()
+        {
+            var students = ServiceHelper.GetStudentService().GetAll();
+
+            Assert.IsTrue(students.Any(s => s.Graduated));
+        }
+        [TestMethod]
+        public void TestHasNotStudentGraduated()
+        {
+            var students = ServiceHelper.GetStudentService().GetAll();
+
+            Assert.IsTrue(students.Any(s => !s.Graduated));
+        }
+
+        [TestMethod]
+        public void TestStanding()
+        {
+            var student = ServiceHelper.GetStudentService().GetById(4);
+
+            Assert.AreEqual(STANDING.Remedial, student.Standing);
+        }
     }
 }

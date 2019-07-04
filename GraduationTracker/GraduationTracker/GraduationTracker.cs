@@ -26,6 +26,7 @@ namespace GraduationTracker
                             average += student.Courses[j].Mark;
                             if (student.Courses[j].Mark > requirement.MinimumMark)
                             {
+                                //Not been used???
                                 credits += requirement.Credits;
                             }
                         }
@@ -42,6 +43,7 @@ namespace GraduationTracker
             else if (average < 80)
                 standing = STANDING.Average;
             else if (average < 95)
+                //Should this one be SumaCumLaude?
                 standing = STANDING.MagnaCumLaude;
             else
                 standing = STANDING.MagnaCumLaude;
