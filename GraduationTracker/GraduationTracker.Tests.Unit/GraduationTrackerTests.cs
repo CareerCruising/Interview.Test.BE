@@ -1,88 +1,71 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
+using GraduationTracker.Repositories;
 
 namespace GraduationTracker.Tests.Unit
 {
     [TestClass]
     public class GraduationTrackerTests
     {
-        [TestMethod]
-        public void TestHasCredits()
-        {
-            var tracker = new GraduationTracker();
+        private  Business_Logic.GraduationTracker GraduationTracker => new Business_Logic.GraduationTracker();
 
-            var diploma = new Diploma
+        private StudentRepository StudentRepository => new StudentRepository();
+        private DiplomaRepository DiplomaRepository => new DiplomaRepository();
+
+        [TestMethod]
+        public void TestExistingStudentHasGraduated()
+        {
+            var diploma = DiplomaRepository.GetItem(1);
+
+           
+            var students = new List<Student>()
             {
-                Id = 1,
-                Credits = 4,
-                Requirements = new int[] { 100, 102, 103, 104 }
+                StudentRepository.GetItem(1),
+                StudentRepository.GetItem(2),
+                StudentRepository.GetItem(3),
+                StudentRepository.GetItem(4) 
             };
 
-            var students = new[]
-            {
-               new Student
-               {
-                   Id = 1,
-                   Courses = new Course[]
-                   {
-                        new Course{Id = 1, Name = "Math", Mark=95 },
-                        new Course{Id = 2, Name = "Science", Mark=95 },
-                        new Course{Id = 3, Name = "Literature", Mark=95 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=95 }
-                   }
-               },
-               new Student
-               {
-                   Id = 2,
-                   Courses = new Course[]
-                   {
-                        new Course{Id = 1, Name = "Math", Mark=80 },
-                        new Course{Id = 2, Name = "Science", Mark=80 },
-                        new Course{Id = 3, Name = "Literature", Mark=80 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=80 }
-                   }
-               },
-            new Student
-            {
-                Id = 3,
-                Courses = new Course[]
-                {
-                    new Course{Id = 1, Name = "Math", Mark=50 },
-                    new Course{Id = 2, Name = "Science", Mark=50 },
-                    new Course{Id = 3, Name = "Literature", Mark=50 },
-                    new Course{Id = 4, Name = "Physichal Education", Mark=50 }
-                }
-            },
-            new Student
-            {
-                Id = 4,
-                Courses = new Course[]
-                {
-                    new Course{Id = 1, Name = "Math", Mark=40 },
-                    new Course{Id = 2, Name = "Science", Mark=40 },
-                    new Course{Id = 3, Name = "Literature", Mark=40 },
-                    new Course{Id = 4, Name = "Physichal Education", Mark=40 }
-                }
-            }
+            var graduated = students.Where(x => GraduationTracker.HasGraduated(diploma, x).Passed);
 
+            Assert.AreEqual(graduated.Count(), 3);
 
-            //tracker.HasGraduated()
-        };
-            
-            var graduated = new List<Tuple<bool, STANDING>>();
-
-            foreach(var student in students)
-            {
-                graduated.Add(tracker.HasGraduated(diploma, student));      
-            }
-
-            
-            Assert.IsFalse(graduated.Any());
-
+          
+          
         }
 
+    
+        [TestMethod]
+        public void TestStudentHasNotGraduated()
+        {
+            var diploma = DiplomaRepository.GetItem(1);
 
+            //Repository Data
+            var student = StudentRepository.GetItem(4);
+
+            var result = GraduationTracker.HasGraduated(diploma, student);
+
+            Assert.IsFalse(result.Passed);
+            Assert.IsTrue(result.Status == Standing.Remedial);
+
+            //Custom Data
+            var newStudent = new Student
+            {
+                Id = 1,
+                Courses = new[]
+                  {
+                      new Course{Id = 1, Name = "Math", Mark=0 },
+                      new Course{Id = 2, Name = "Science", Mark=100 },
+                      new Course{Id = 3, Name = "Literature", Mark=1 },
+                      new Course{Id = 4, Name = "Physical Education", Mark=2 }
+                  }
+            };
+
+            var newStudentResult = GraduationTracker.HasGraduated(diploma, newStudent);
+            Assert.IsFalse(newStudentResult.Passed);
+        }
+
+       
     }
 }
