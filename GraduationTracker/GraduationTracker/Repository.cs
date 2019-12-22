@@ -1,19 +1,14 @@
-﻿namespace GraduationTracker
+﻿using System;
+
+namespace GraduationTracker
 {
     public class Repository
     {
         public static Student GetStudent(int id)
         {
             var students = GetStudents();
-            Student student = null;
 
-            for (int i = 0; i < students.Length; i++)
-            {
-                if (id == students[i].Id)
-                {
-                    student = students[i];
-                }
-            }
+            Student student = Array.Find(students, s => s.Id == id);
 
             return student;
         }
@@ -21,15 +16,8 @@
         public static Diploma GetDiploma(int id)
         {
             var diplomas = GetDiplomas();
-            Diploma diploma = null;
 
-            for (int i = 0; i < diplomas.Length; i++)
-            {
-                if (id == diplomas[i].Id)
-                {
-                    diploma = diplomas[i];
-                }
-            }
+            Diploma diploma = Array.Find(diplomas, d => d.Id == id);
 
             return diploma;
         }
@@ -37,15 +25,8 @@
         public static Requirement GetRequirement(int id)
         {
             var requirements = GetRequirements();
-            Requirement requirement = null;
 
-            for (int i = 0; i < requirements.Length; i++)
-            {
-                if (id == requirements[i].Id)
-                {
-                    requirement = requirements[i];
-                }
-            }
+            Requirement requirement = Array.Find(requirements, r => r.Id == id);
 
             return requirement;
         }
@@ -73,6 +54,7 @@
                 new Requirement { Id = 104, Name = "Physichal Education", MinimumMark = 50, Courses = new int[] { 4 }, Credits = 1 }
             };
         }
+
         private static Student[] GetStudents()
         {
             return new[]
