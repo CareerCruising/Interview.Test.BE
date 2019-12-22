@@ -70,7 +70,6 @@ namespace GraduationTracker.Tests.Unit
 
             //tracker.HasGraduated()
 
-
             var graduated = new List<Tuple<bool, STANDING>>();
 
             foreach (Student student in students)
