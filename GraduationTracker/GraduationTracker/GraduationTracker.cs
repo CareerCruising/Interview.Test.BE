@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace GraduationTracker
 {
@@ -6,33 +7,58 @@ namespace GraduationTracker
     {
         public Tuple<bool, STANDING> HasGraduated(Diploma diploma, Student student)
         {
-            int credits = 0;
-            int average = 0;
+            /*
+             * The criteria for graduation is unclear
+             * 
+             * The existing code seems to make this assumption:
+             * - For all Courses tied to a Requirement, the average Course.Mark must be >= 50 in order for the Student to have graduated with that Diploma
+             * 
+             * It also seems to not account for multiple requirements referencing the same course. In that case, a course may be included twice, skewing the average.
+             *
+             * I am making the following assumptions:
+             * 1. Each Requirement in Diploma.Requirements must be met in order for the Student to have graduated with that Diploma
+             * 2. Each Course in Requirement.Courses must be passed in order for the Requirement to be considered met
+             * 3. A Course must have a Course.Mark >= Requirement.MinimumMark in order for the Course to be considered passed
+             * 4. The average determining the student's Standing includes all courses the student has taken.
+             * 5. Each student only ever takes a particular course once
+             *
+             * Other possible criteria I could have considered:
+             * - The sum of Requirement.Credits for all met Requirements >= Diploma.Credits in order for the Student to have graduated with that Diploma
+             * - The sum of Course.Credits for all passed Courses >= Requirement.Credits in order for the Requirement to be considered met
+             *      (This would mean that assumption #2 above wouldn't be necessary, and some failed courses would be allowed)
+             * - The sum of Course.Credits for all passed Courses >= Diploma.Credits in order for the Student to have graduated with that Diploma
+             *      (For courses not tied to a requirement, would would be the criteria for a "passing course"?) 
+             */
 
-            for (int i = 0; i < diploma.Requirements.Length; i++)
+            bool hasGraduated = diploma.Requirements.All(requirementId =>
             {
-                for (int j = 0; j < student.Courses.Length; j++)
+                Requirement requirement = Repository.GetRequirement(requirementId);
+
+                bool requirementMet = requirement.Courses.All(courseId =>
                 {
-                    Requirement requirement = Repository.GetRequirement(diploma.Requirements[i]);
+                    Course course = Array.Find(student.Courses, c => c.Id == courseId);
 
-                    for (int k = 0; k < requirement.Courses.Length; k++)
+                    // If required Course could not be found, requirement is not met
+                    if (course is null)
                     {
-                        if (requirement.Courses[k] == student.Courses[j].Id)
-                        {
-                            average += student.Courses[j].Mark;
-                            if (student.Courses[j].Mark > requirement.MinimumMark)
-                            {
-                                credits += requirement.Credits;
-                            }
-                        }
+                        return false;
                     }
-                }
-            }
 
-            average = average / student.Courses.Length;
+                    // If Course mark is not high enough, requirement is not met
+                    bool coursePassed = course.Mark >= requirement.MinimumMark;
 
-            STANDING standing = STANDING.None;
+                    return coursePassed;
+                });
 
+                return requirementMet;
+            });
+
+            // This includes all courses, even ones not in a requirement.
+            // If we only wanted courses belonging to requirements, I'd filter/where the list beforehand
+            int totalMarks = student.Courses.Select(s => s.Mark).Sum();
+            int average = totalMarks / student.Courses.Length;
+
+            STANDING standing;
             if (average < 50)
             {
                 standing = STANDING.Remedial;
@@ -43,26 +69,14 @@ namespace GraduationTracker
             }
             else if (average < 95)
             {
-                standing = STANDING.MagnaCumLaude;
+                standing = STANDING.SumaCumLaude;
             }
             else
             {
                 standing = STANDING.MagnaCumLaude;
             }
 
-            switch (standing)
-            {
-                case STANDING.Remedial:
-                    return new Tuple<bool, STANDING>(false, standing);
-                case STANDING.Average:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.SumaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.MagnaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
-                default:
-                    return new Tuple<bool, STANDING>(false, standing);
-            }
+            return new Tuple<bool, STANDING>(hasGraduated, standing);
         }
     }
 }
