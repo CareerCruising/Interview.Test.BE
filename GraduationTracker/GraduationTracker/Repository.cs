@@ -30,6 +30,7 @@ namespace GraduationTracker
 
             return requirement;
         }
+
         private static Student[] GetStudents()
         {
             return new[]
