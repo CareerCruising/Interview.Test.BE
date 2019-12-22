@@ -94,6 +94,7 @@ namespace GraduationTracker
             };
         }
 
+        // Why is this public?
         public static Requirement[] GetRequirements()
         {
             return new[]
