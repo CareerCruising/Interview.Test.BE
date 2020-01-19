@@ -5,74 +5,55 @@ namespace GraduationTracker.Tests.Unit
     [TestClass]
     public class GraduationTrackerTests
     {
-        [TestMethod]
-        public void TestHasGraduated()
-        {
-            var tracker = new GraduationTracker();
+        private GraduationTracker Tracker { get; set; }
 
-            var diploma = new Diploma
+        public GraduationTrackerTests()
+        {
+            Tracker = new GraduationTracker();
+        }
+
+        private Student GetStudent(int id, int mark)
+        {
+            return new Student
+            {
+                Id = id,
+                Courses = new Course[]
+                    {
+                        new Course{ Id = 1, Name = "Math", Mark = mark },
+                        new Course{ Id = 2, Name = "Science", Mark = mark },
+                        new Course{ Id = 3, Name = "Literature", Mark = mark },
+                        new Course{ Id = 4, Name = "Physichal Education", Mark = mark }
+                    }
+            };
+        }
+
+        private Diploma GetDiploma(int credits, int[] requirements)
+        {
+            return new Diploma
             {
                 Id = 1,
-                Credits = 4,
-
-                Requirements = new int[] { 100, 102, 103, 104 }
+                Credits = credits,
+                Requirements = requirements
             };
+        }
 
-            var expect = new bool[] { true, true, true, false };
+        [DataTestMethod]
+        [DataRow(100, 95, true, Standing.SumaCumLaude)]
+        [DataRow(200, 94, true, Standing.MagnaCumLaude)]
+        [DataRow(300, 80, true, Standing.MagnaCumLaude)]
+        [DataRow(400, 79, true, Standing.Average)]
+        [DataRow(500, 50, true, Standing.Average)]
+        [DataRow(600, 49, false, Standing.Remedial)]
+        [DataRow(700, 40, false, Standing.Remedial)]
+        [DataRow(800, 0, false, Standing.Remedial)]
+        public void TestHasGraduated(int id, int mark, bool hasGratuated, Standing standing)
+        {
+            var diploma = GetDiploma(4, new int[] { 100, 102, 103, 104 });
+            var student = GetStudent(id, mark);
+            var result = Tracker.HasGraduated(diploma, student);
 
-            var students = new[]
-            {
-                new Student
-                {
-                    Id = 1,
-                    Courses = new Course[]
-                    {
-                        new Course{Id = 1, Name = "Math", Mark=95 },
-                        new Course{Id = 2, Name = "Science", Mark=95 },
-                        new Course{Id = 3, Name = "Literature", Mark=95 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=95 }
-                    }
-                },
-                new Student
-                {
-                    Id = 2,
-                    Courses = new Course[]
-                    {
-                        new Course{Id = 1, Name = "Math", Mark=80 },
-                        new Course{Id = 2, Name = "Science", Mark=80 },
-                        new Course{Id = 3, Name = "Literature", Mark=80 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=80 }
-                    }
-                },
-                new Student
-                {
-                    Id = 3,
-                    Courses = new Course[]
-                    {
-                        new Course{Id = 1, Name = "Math", Mark=50 },
-                        new Course{Id = 2, Name = "Science", Mark=50 },
-                        new Course{Id = 3, Name = "Literature", Mark=50 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=50 }
-                    }
-                },
-                new Student
-                {
-                    Id = 4,
-                    Courses = new Course[]
-                    {
-                        new Course{Id = 1, Name = "Math", Mark=40 },
-                        new Course{Id = 2, Name = "Science", Mark=40 },
-                        new Course{Id = 3, Name = "Literature", Mark=40 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=40 }
-                    }
-                }
-            };
-
-            for (var i = 0; i < students.Length; i++)
-            {
-                var graduated = tracker.HasGraduated(diploma, students[i]);
-                Assert.AreEqual(expect[i], graduated.Item1);
-            }
+            Assert.AreEqual(hasGratuated, result.Item1);
+            Assert.AreEqual(standing, result.Item2);
         }
     }
 }
