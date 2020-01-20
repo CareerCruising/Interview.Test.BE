@@ -1,38 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GraduationTracker
 {
-    public partial class GraduationTracker
+    public class GraduationTracker
     {   
-        public Tuple<bool, Standing>  HasGraduated(Diploma diploma, Student student)
+        public Tuple<bool, Standing> HasGraduated(Diploma diploma, Student student)
         {
+            if (diploma == null) throw new ArgumentException("Invalid diploma.");
+            if (student == null) throw new ArgumentException("Invalid student.");
+
             var credits = 0;
             var average = 0;
-        
-            for(int i = 0; i < diploma.Requirements.Length; i++)
-            {
-                for(int j = 0; j < student.Courses.Length; j++)
-                {
-                    var requirement = Repository.GetRequirement(diploma.Requirements[i]);
+            var requirements = GetDiplomaRequirements(diploma);
 
-                    for (int k = 0; k < requirement.Courses.Length; k++)
-                    {
-                        if (requirement.Courses[k] == student.Courses[j].Id)
-                        {
-                            average += student.Courses[j].Mark;
-                            if (student.Courses[j].Mark > requirement.MinimumMark)
-                            {
-                                credits += requirement.Credits;
-                            }
-                        }
-                    }
+            foreach (var requirement in requirements)
+            {
+                foreach (var courseId in requirement.Courses)
+                {
+                    var course = student.Courses.FirstOrDefault(studentCourse => studentCourse.Id == courseId);
+                    if (course == null) return new Tuple<bool, Standing>(false, Standing.None);
+
+                    average += course.Mark;
+                    if (course.Mark > requirement.MinimumMark)
+                        credits += requirement.Credits;
                 }
             }
-
+            
             average /= student.Courses.Length;
 
             if (average < 50)
@@ -43,6 +37,13 @@ namespace GraduationTracker
                 return new Tuple<bool, Standing>(true, Standing.MagnaCumLaude);
             else
                 return new Tuple<bool, Standing>(true, Standing.SumaCumLaude);            
+        }
+
+        private Requirement[] GetDiplomaRequirements(Diploma diploma) 
+        {
+            return Repository.GetRequirements()
+                .Where(requirement => diploma.Requirements.Contains(requirement.Id))
+                .ToArray();
         }
     }
 }

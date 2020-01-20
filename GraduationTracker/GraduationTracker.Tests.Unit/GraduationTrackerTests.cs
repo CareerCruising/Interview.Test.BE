@@ -1,4 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System;
 
 namespace GraduationTracker.Tests.Unit
 {
@@ -12,19 +13,24 @@ namespace GraduationTracker.Tests.Unit
             Tracker = new GraduationTracker();
         }
 
-        private Student GetStudent(int id, int mark)
+        private Student GetStudent(int id, int mark, int courses = 4)
         {
             return new Student
             {
                 Id = id,
-                Courses = new Course[]
-                    {
-                        new Course{ Id = 1, Name = "Math", Mark = mark },
-                        new Course{ Id = 2, Name = "Science", Mark = mark },
-                        new Course{ Id = 3, Name = "Literature", Mark = mark },
-                        new Course{ Id = 4, Name = "Physichal Education", Mark = mark }
-                    }
+                Courses = GetCourses(id, mark, courses)
             };
+        }
+
+        private Course[] GetCourses(int id, int mark, int length)
+        {
+            var courses = new Course[length];
+
+            for(var i = 0; i < length; i++)
+            {
+                courses[i] = new Course { Id = i + 1, Name = $"Course {i}", Mark = mark };
+            }
+            return courses;
         }
 
         private Diploma GetDiploma(int credits, int[] requirements)
@@ -54,6 +60,33 @@ namespace GraduationTracker.Tests.Unit
 
             Assert.AreEqual(hasGratuated, result.Item1);
             Assert.AreEqual(standing, result.Item2);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException), "Invalid diploma.")]
+        public void TestInvalidDiploma()
+        {
+            var student = GetStudent(1, 80);
+            Tracker.HasGraduated(null, student);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException), "Invalid student.")]
+        public void TestInvalidStudent()
+        {
+            var diploma = GetDiploma(4, new int[] { 100, 102, 103, 104 });
+            Tracker.HasGraduated(diploma, null);
+        }
+
+        [TestMethod]
+        public void TestStudentMissingDiplomaRequirement()
+        {
+            var diploma = GetDiploma(4, new int[] { 100, 102, 103, 104 });
+            var student = GetStudent(1, 100, 3);
+            var result = Tracker.HasGraduated(diploma, student);
+
+            Assert.AreEqual(false, result.Item1);
+            Assert.AreEqual(Standing.None, result.Item2);
         }
     }
 }
