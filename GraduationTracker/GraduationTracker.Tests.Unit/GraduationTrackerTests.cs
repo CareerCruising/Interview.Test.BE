@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using GraduationTracker.Model;
+using GraduationTracker.Service;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
 namespace GraduationTracker.Tests.Unit
@@ -6,11 +8,11 @@ namespace GraduationTracker.Tests.Unit
     [TestClass]
     public class GraduationTrackerTests
     {
-        private GraduationTracker Tracker { get; set; }
+        private GraduationTrackerService Tracker { get; set; }
 
         public GraduationTrackerTests()
         {
-            Tracker = new GraduationTracker();
+            Tracker = new GraduationTrackerService(new MockUnitOfWork());
         }
 
         private Student GetStudent(int id, int mark, int courses = 4)

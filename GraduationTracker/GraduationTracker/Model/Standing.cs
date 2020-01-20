@@ -1,4 +1,4 @@
-﻿namespace GraduationTracker
+﻿namespace GraduationTracker.Model
 {
     public enum Standing
     {
@@ -8,5 +8,4 @@
         Average,
         Remedial
     }
-
 }
