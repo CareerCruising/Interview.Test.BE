@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 namespace GraduationTracker
 {
     public partial class GraduationTracker
-    {   
-        public Tuple<bool, STANDING>  HasGraduated(Diploma diploma, Student student)
+    {
+        public Tuple<bool, STANDING> HasGraduated(Diploma diploma, Student student)
         {
             var credits = 0;
             var average = 0;
-        
-            for(int i = 0; i < diploma.Requirements.Length; i++)
+
+            for (int i = 0; i < diploma.Requirements.Length; i++)
             {
-                for(int j = 0; j < student.Courses.Length; j++)
+                for (int j = 0; j < student.Courses.Length; j++)
                 {
                     var requirement = Repository.GetRequirement(diploma.Requirements[i]);
 
@@ -35,6 +35,7 @@ namespace GraduationTracker
 
             average = average / student.Courses.Length;
 
+            var earnedEnoughCredits = credits >= diploma.Credits;
             var standing = STANDING.None;
 
             if (average < 50)
@@ -51,15 +52,14 @@ namespace GraduationTracker
                 case STANDING.Remedial:
                     return new Tuple<bool, STANDING>(false, standing);
                 case STANDING.Average:
-                    return new Tuple<bool, STANDING>(true, standing);
+                    return new Tuple<bool, STANDING>(earnedEnoughCredits, standing);
                 case STANDING.SumaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
+                    return new Tuple<bool, STANDING>(earnedEnoughCredits, standing);
                 case STANDING.MagnaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
-
+                    return new Tuple<bool, STANDING>(earnedEnoughCredits, standing);
                 default:
                     return new Tuple<bool, STANDING>(false, standing);
-            } 
+            }
         }
     }
 }
