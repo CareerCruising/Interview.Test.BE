@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace GraduationTracker
 {
-    public class Course
+    public class StudentCourseMark
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public int Credits { get; set; }
+        public int StudentId { get; set; }
+        public int CourseId { get; set; }
+        public int Mark { get; set; }
     }
 }
