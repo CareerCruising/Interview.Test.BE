@@ -76,6 +76,10 @@ namespace GraduationTracker.Tests.Unit
             }
 
             Assert.IsTrue(graduated.Count(s => !s.Item1) == 1);
+            Assert.IsTrue(tracker.HasGraduated(diploma, students[0]).Item1);
+            Assert.IsTrue(tracker.HasGraduated(diploma, students[1]).Item1);
+            Assert.IsTrue(tracker.HasGraduated(diploma, students[2]).Item1);
+            Assert.IsFalse(tracker.HasGraduated(diploma, students[3]).Item1);
         }
     }
 }
