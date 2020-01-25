@@ -33,7 +33,7 @@ namespace GraduationTracker.Services
         }
 
         /// <summary>
-        /// Gets total acquired credits by student till now !!
+        /// Gets total acquired credits by student till now.
         /// </summary>
         /// <param name="requirements"></param>
         /// <returns>Total acquired credits</returns>
@@ -45,7 +45,6 @@ namespace GraduationTracker.Services
                 /*
                    Note: Based on the assumption that each course can have only one requirement
                    otherwise their could be unexpected behaviour while calculating credits.
-
                 */
 
                 var courseRequirement = requirements.FirstOrDefault((requirement) =>
@@ -53,7 +52,7 @@ namespace GraduationTracker.Services
 
                 if (courseRequirement != null && course.Mark > courseRequirement.MinimumMark)
                 {
-                    credits += courseRequirement.Credits;
+                    credits += courseRequirement.Credits ;
                 }
             }
             return credits;

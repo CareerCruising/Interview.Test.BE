@@ -1,88 +1,110 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using GraduationTracker.Tests.Unit.FakeServices;
+using GraduationTracker.Models;
 
 namespace GraduationTracker.Tests.Unit
 {
     [TestClass]
     public class GraduationTrackerTests
     {
+      
         [TestMethod]
+        [Description("Test for student has credit")]
         public void TestHasCredits()
         {
-            var tracker = new GraduationTracker();
+            // Arrange
+            var trackerCreditZero = new GraduationTracker(new FakeDiplomaService(6), new FakeStudentService(Standing.None, 0));
+            var trackerCreditOne = new GraduationTracker(new FakeDiplomaService(6), new FakeStudentService(Standing.None, 1));
+            var trackerCreditNegative = new GraduationTracker(new FakeDiplomaService(6), new FakeStudentService(Standing.None, -1));
 
-            var diploma = new Diploma
-            {
-                Id = 1,
-                Credits = 4,
-                Requirements = new int[] { 100, 102, 103, 104 }
-            };
+            // Act
 
-            var students = new[]
-            {
-               new Student
-               {
-                   Id = 1,
-                   Courses = new Course[]
-                   {
-                        new Course{Id = 1, Name = "Math", Mark=95 },
-                        new Course{Id = 2, Name = "Science", Mark=95 },
-                        new Course{Id = 3, Name = "Literature", Mark=95 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=95 }
-                   }
-               },
-               new Student
-               {
-                   Id = 2,
-                   Courses = new Course[]
-                   {
-                        new Course{Id = 1, Name = "Math", Mark=80 },
-                        new Course{Id = 2, Name = "Science", Mark=80 },
-                        new Course{Id = 3, Name = "Literature", Mark=80 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=80 }
-                   }
-               },
-            new Student
-            {
-                Id = 3,
-                Courses = new Course[]
-                {
-                    new Course{Id = 1, Name = "Math", Mark=50 },
-                    new Course{Id = 2, Name = "Science", Mark=50 },
-                    new Course{Id = 3, Name = "Literature", Mark=50 },
-                    new Course{Id = 4, Name = "Physichal Education", Mark=50 }
-                }
-            },
-            new Student
-            {
-                Id = 4,
-                Courses = new Course[]
-                {
-                    new Course{Id = 1, Name = "Math", Mark=40 },
-                    new Course{Id = 2, Name = "Science", Mark=40 },
-                    new Course{Id = 3, Name = "Literature", Mark=40 },
-                    new Course{Id = 4, Name = "Physichal Education", Mark=40 }
-                }
-            }
+            var actualCreditZero = trackerCreditZero.HasCredits();
+            var actualCreditOne = trackerCreditOne.HasCredits();
+            var actualCreditNegative = trackerCreditNegative.HasCredits();
 
+            // Assert
 
-            //tracker.HasGraduated()
-        };
-            
-            var graduated = new List<Tuple<bool, STANDING>>();
-
-            foreach(var student in students)
-            {
-                graduated.Add(tracker.HasGraduated(diploma, student));      
-            }
-
-            
-            Assert.IsFalse(graduated.Any());
+            Assert.IsFalse(actualCreditZero);
+            Assert.IsTrue(actualCreditOne);
+            Assert.IsFalse(actualCreditNegative);
 
         }
 
+        
+        [TestMethod]
+        [Description((@"Test for student should graduate if credit earned is equal or greater than credit offered by diploma
+                       Keeping standing condition constant and fulfilled"))]
+        public void TestHasGraduated_BasedOnCreditEarnedCondition()
+        {
 
+            // Arrange
+            var stubTracker1 = new GraduationTracker(new FakeDiplomaService(6), new FakeStudentService(Standing.Average, 6));
+            var stubTracker2 = new GraduationTracker(new FakeDiplomaService(6), new FakeStudentService(Standing.MagnaCumLaude, 7));
+            var stubTracker3 = new GraduationTracker(new FakeDiplomaService(6), new FakeStudentService(Standing.SumaCumLaude, 2));
+
+            // Action
+
+            var actual1 = stubTracker1.HasGraduated();
+            var actual2 = stubTracker2.HasGraduated();
+            var actual3 = stubTracker3.HasGraduated();
+
+            // Assert
+
+            Assert.IsTrue(actual1);
+            Assert.IsTrue(actual2);
+            Assert.IsFalse(actual3);
+        }
+
+        [TestMethod]
+        [Description(@"Test for student should graduate if standing is not {Remedial,None}
+                        Keeping credit earned condition constant and fulfilled")]
+        public void TestHasGraduated_BasedOnStanding()
+        {
+           
+            // Arrange
+            var stubTrackerStandingNone = new GraduationTracker(new FakeDiplomaService(6), new FakeStudentService(Standing.None, 6));
+            var stubTrackerStandingRemedial = new GraduationTracker(new FakeDiplomaService(6), new FakeStudentService(Standing.Remedial, 6));
+            var stubTrackerStandingAverage = new GraduationTracker(new FakeDiplomaService(6), new FakeStudentService(Standing.Average, 6));
+            var stubTrackerStandingMag = new GraduationTracker(new FakeDiplomaService(6), new FakeStudentService(Standing.MagnaCumLaude, 6));
+            var stubTrackerStandingSuma = new GraduationTracker(new FakeDiplomaService(6), new FakeStudentService(Standing.SumaCumLaude, 6));
+
+            // Action
+
+            var actualStandingNone = stubTrackerStandingNone.HasGraduated();
+            var actualStandingRemedial = stubTrackerStandingRemedial.HasGraduated();
+            var actualStandingAverage = stubTrackerStandingAverage.HasGraduated();
+            var actualStandingMag = stubTrackerStandingMag.HasGraduated();
+            var actualStandingSuma = stubTrackerStandingSuma.HasGraduated();
+
+            // Assert
+
+            Assert.IsFalse(actualStandingNone);
+            Assert.IsFalse(actualStandingRemedial);
+            Assert.IsTrue(actualStandingAverage);
+            Assert.IsTrue(actualStandingMag);
+            Assert.IsTrue(actualStandingSuma);
+        }
+
+
+        [TestMethod]
+        [Description("Test for student should graduate for both condition")]
+        public void TestGraduated_BasedOnBothCondition()
+        {
+            // Arrange
+            var stubTrackerBothUnSatisfied = new GraduationTracker(new FakeDiplomaService(6), new FakeStudentService(Standing.None, 5));
+            var stubTrackerOneSatisfied = new GraduationTracker(new FakeDiplomaService(6), new FakeStudentService(Standing.Remedial, 6));
+            var stubTrackerBothSatisfied = new GraduationTracker(new FakeDiplomaService(6), new FakeStudentService(Standing.MagnaCumLaude, 6));
+
+            // Action
+            var actualBothUnSatisfied = stubTrackerBothUnSatisfied.HasGraduated();
+            var actualOneSatisfied = stubTrackerOneSatisfied.HasGraduated();
+            var actualBothSatisfied = stubTrackerBothSatisfied.HasGraduated();
+
+            // Assert
+            Assert.IsFalse(actualBothUnSatisfied);
+            Assert.IsFalse(actualOneSatisfied);
+            Assert.IsTrue(actualBothSatisfied);
+        }
     }
 }
