@@ -2,11 +2,11 @@
 {
     public enum STANDING
     {
-        None,
+        None = 0,
         SumaCumLaude,
-        MagnaCumLaude,
-        Average,
-        Remedial
+        MagnaCumLaude = 95,
+        Average = 80,
+        Remedial = 50
     }
 
 }

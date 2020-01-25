@@ -12,39 +12,49 @@ namespace GraduationTracker
         {
             var credits = 0;
             var average = 0;
-        
-            for(int i = 0; i < diploma.Requirements.Length; i++)
+            var includedCourseCount = 0;
+            
+            for (int i = 0; i < diploma.Requirements.Length; i++)
             {
-                for(int j = 0; j < student.Courses.Length; j++)
+                var requirement = Repository.GetRequirement(diploma.Requirements[i]);
+                var passedCoursesCount = 0;
+                for (int k = 0; k < requirement.Courses.Length; k++)
                 {
-                    var requirement = Repository.GetRequirement(diploma.Requirements[i]);
-
-                    for (int k = 0; k < requirement.Courses.Length; k++)
-                    {
+                    for (int j = 0; j < student.Courses.Length; j++)
+                    {                                        
                         if (requirement.Courses[k] == student.Courses[j].Id)
                         {
+                            includedCourseCount++;
                             average += student.Courses[j].Mark;
                             if (student.Courses[j].Mark > requirement.MinimumMark)
-                            {
-                                credits += requirement.Credits;
+                            {                                
+                                passedCoursesCount++;
                             }
                         }
                     }
                 }
+                if(passedCoursesCount == requirement.Courses.Length)
+                {
+                    credits += requirement.Credits;
+                }
             }
-
-            average = average / student.Courses.Length;
+            
+            average = includedCourseCount == 0 ? 0 : average / includedCourseCount;
 
             var standing = STANDING.None;
 
-            if (average < 50)
+            if (average == (int)STANDING.None)
+                standing = STANDING.None;
+            else if (average < (int)STANDING.Remedial)
                 standing = STANDING.Remedial;
-            else if (average < 80)
+            else if (average < (int)STANDING.Average)
                 standing = STANDING.Average;
-            else if (average < 95)
+            else if (average < (int)STANDING.MagnaCumLaude)
                 standing = STANDING.MagnaCumLaude;
             else
-                standing = STANDING.MagnaCumLaude;
+                standing = STANDING.SumaCumLaude;
+
+            if (credits < diploma.Credits) { return new Tuple<bool, STANDING>(false, standing); }
 
             switch (standing)
             {
