@@ -1,67 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GraduationTracker.Models;
-using GraduationTracker.Repositories;
+﻿using GraduationTracker.Models;
+using GraduationTracker.Services;
 
 namespace GraduationTracker
 {
-    public partial class GraduationTracker
-    {   
-        public Tuple<bool, STANDING>  HasGraduated(Diploma diploma, Student student)
+    public class GraduationTracker
+    {
+
+        private readonly IDiplomaRequirementService _diplomaService;
+
+        private readonly IStudentService _studentService;
+
+        public GraduationTracker(IDiplomaRequirementService diplomaService, IStudentService studentService)
         {
-            var credits = 0;
-            var average = 0;
-        
-            for(int i = 0; i < diploma.Requirements.Length; i++)
-            {
-                for(int j = 0; j < student.Courses.Length; j++)
-                {
-                    var requirement = Repository.GetRequirement(diploma.Requirements[i]);
+            _diplomaService = diplomaService;
+            _studentService = studentService;
+        }
 
-                    for (int k = 0; k < requirement.Courses.Length; k++)
-                    {
-                        if (requirement.Courses[k] == student.Courses[j].Id)
-                        {
-                            average += student.Courses[j].Mark;
-                            if (student.Courses[j].Mark > requirement.MinimumMark)
-                            {
-                                credits += requirement.Credits;
-                            }
-                        }
-                    }
-                }
-            }
+        /// <summary>
+        /// This method identifies whether student is graduated or not !!
+        /// </summary>
+        /// <returns>Boolean</returns>
+        public bool HasGraduated()
+        {
+            var standing = _studentService.GetStanding();
+            var credits = _studentService.CalculateCredits(_diplomaService.GetRequirements());
 
-            average = average / student.Courses.Length;
+            /*
+               Assumption Alert!!
+               Student is graduated
+               1) if he has equal or more credits than credit offered by diploma 
+               2) Student's standing is not either remedial or none
+            */
 
-            var standing = STANDING.None;
+            return credits >= _diplomaService.Diploma.Credits
+                   && (standing != Standing.Remedial && standing != Standing.None);
 
-            if (average < 50)
-                standing = STANDING.Remedial;
-            else if (average < 80)
-                standing = STANDING.Average;
-            else if (average < 95)
-                standing = STANDING.MagnaCumLaude;
-            else
-                standing = STANDING.MagnaCumLaude;
+        }
 
-            switch (standing)
-            {
-                case STANDING.Remedial:
-                    return new Tuple<bool, STANDING>(false, standing);
-                case STANDING.Average:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.SumaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.MagnaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
-
-                default:
-                    return new Tuple<bool, STANDING>(false, standing);
-            } 
+        /// <summary>
+        ///  This method identifies if student has earned any credits.
+        /// </summary>
+        /// <returns>Boolean</returns>
+        public bool HasCredits()
+        {
+            var credits = _studentService.CalculateCredits(_diplomaService.GetRequirements());
+            return credits > 0;
         }
     }
 }
