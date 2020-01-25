@@ -34,6 +34,10 @@ namespace GraduationTracker.Services
 
         /// <summary>
         /// Gets total acquired credits by student till now.
+        /// 
+        ///  Note: Based on the assumption that each course can have only one requirement
+        ///  otherwise their could be unexpected behaviour while calculating credits.
+        /// 
         /// </summary>
         /// <param name="requirements"></param>
         /// <returns>Total acquired credits</returns>
@@ -42,11 +46,6 @@ namespace GraduationTracker.Services
             var credits = 0;
             foreach (var course in _student.Courses)
             {
-                /*
-                   Note: Based on the assumption that each course can have only one requirement
-                   otherwise their could be unexpected behaviour while calculating credits.
-                */
-
                 var courseRequirement = requirements.FirstOrDefault((requirement) =>
                      requirement.Courses.Contains(course.Id));
 

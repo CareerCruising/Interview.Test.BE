@@ -18,23 +18,18 @@ namespace GraduationTracker
 
         /// <summary>
         /// This method identifies whether student is graduated or not !!
+        /// 
+        ///  * Note Assumption made Student is graduated
+        ///  1) if he has equal or more credits than credit offered by diploma 
+        ///  2) Student's standing is not either remedial or none
+        /// 
         /// </summary>
         /// <returns>Boolean</returns>
         public bool HasGraduated()
         {
             var standing = _studentService.GetStanding();
             var credits = _studentService.CalculateCredits(_diplomaService.GetRequirements());
-
-            /*
-               Assumption Alert!!
-               Student is graduated
-               1) if he has equal or more credits than credit offered by diploma 
-               2) Student's standing is not either remedial or none
-            */
-
-            return credits >= _diplomaService.Diploma.Credits
-                   && (standing != Standing.Remedial && standing != Standing.None);
-
+            return credits >= _diplomaService.Diploma.Credits && (standing != Standing.Remedial && standing != Standing.None);
         }
 
         /// <summary>
