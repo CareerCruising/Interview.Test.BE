@@ -45,9 +45,13 @@
     <Compile Include="GraduationTracker.cs" />
     <Compile Include="Models\STANDING.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\DiplomaRepository.cs" />
+    <Compile Include="Repositories\IRepository.cs" />
     <Compile Include="Repositories\Repository.cs" />
     <Compile Include="Models\Requirement.cs" />
     <Compile Include="Models\Student.cs" />
+    <Compile Include="Repositories\RequirementRepository.cs" />
+    <Compile Include="Repositories\StudentRepository.cs" />
     <Compile Include="Services\DiplomaService.cs" />
     <Compile Include="Services\IDiplomaRequirementService.cs" />
     <Compile Include="Services\IRequirementService.cs" />
