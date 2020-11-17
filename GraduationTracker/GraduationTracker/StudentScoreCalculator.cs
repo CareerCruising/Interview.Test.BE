@@ -13,21 +13,25 @@
 
         public float GetAverageMarks(Diploma diploma, Student student)
         {
-            var credits = 0;
+            var credits = 0; //unused variable
+
             float totalMarks = 0;
+            int noOfDiplomaReq = diploma.Requirements.Length;
+            int noOfStudentCourses = student.Courses.Length;
+            int noOfReqCourses;
 
-            for (int i = 0; i < diploma.Requirements.Length; i++)
+            for (int diplomaReqIdx = 0; diplomaReqIdx < noOfDiplomaReq; diplomaReqIdx++)
             {
-                for (int j = 0; j < student.Courses.Length; j++)
+                var requirement = this._requirementDAO.GetItemById(diploma.Requirements[diplomaReqIdx]);
+                noOfReqCourses = requirement.Courses.Length;
+                for (int stdntCourseIdx = 0; stdntCourseIdx < noOfStudentCourses; stdntCourseIdx++)
                 {
-                    var requirement = this._requirementDAO.GetItemById(diploma.Requirements[i]);
-
-                    for (int k = 0; k < requirement.Courses.Length; k++)
+                    for (int reqCourseIdx = 0; reqCourseIdx < noOfReqCourses; reqCourseIdx++)
                     {
-                        if (requirement.Courses[k] == student.Courses[j].Id)
+                        if (requirement.Courses[reqCourseIdx] == student.Courses[stdntCourseIdx].Id)
                         {
-                            totalMarks += student.Courses[j].Mark;
-                            if (student.Courses[j].Mark > requirement.MinimumMark)
+                            totalMarks += student.Courses[stdntCourseIdx].Mark;
+                            if (student.Courses[stdntCourseIdx].Mark > requirement.MinimumMark)
                             {
                                 credits += requirement.Credits;
                             }
