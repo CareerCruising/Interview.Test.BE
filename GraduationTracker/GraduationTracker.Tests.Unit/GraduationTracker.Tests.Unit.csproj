@@ -50,6 +50,12 @@
   <ItemGroup>
     <Compile Include="GraduationTrackerTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StudentScoreCalculatorTest.cs" />
+    <Compile Include="StandingRemedialTest.cs" />
+    <Compile Include="StandingFactoryTest.cs" />
+    <Compile Include="StandingAverageTest.cs" />
+    <Compile Include="StandingMagnaCumLaudeTest.cs" />
+    <Compile Include="StandingSumaCumLaudeTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

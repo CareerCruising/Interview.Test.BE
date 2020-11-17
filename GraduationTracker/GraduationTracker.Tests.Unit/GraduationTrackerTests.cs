@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
+using GraduationTracker.Interfaces;
 
 namespace GraduationTracker.Tests.Unit
 {
@@ -9,20 +10,37 @@ namespace GraduationTracker.Tests.Unit
     public class GraduationTrackerTests
     {
         [TestMethod]
-        public void TestHasCredits()
+        public void GraduatedStandingTest()
         {
-            var tracker = new GraduationTracker();
+            GraduationTrackerTestData graduationTrackerTestData = new GraduationTrackerTestData();
+            var tracker = new GraduationTracker(graduationTrackerTestData);
 
-            var diploma = new Diploma
-            {
-                Id = 1,
-                Credits = 4,
-                Requirements = new int[] { 100, 102, 103, 104 }
+            var actualResult = new List<Tuple<bool, STANDING>>();
+            var expectedResult = new List<Tuple<bool, STANDING>>() {
+                new Tuple<bool, STANDING>(true, STANDING.SumaCumLaude),
+                new Tuple<bool, STANDING>(true, STANDING.MagnaCumLaude),
+                new Tuple<bool, STANDING>(true, STANDING.Average),
+                new Tuple<bool, STANDING>(false, STANDING.Remedial),
             };
 
-            var students = new[]
+            foreach (var student in graduationTrackerTestData.Students)
             {
-               new Student
+                actualResult.Add(tracker.HasGraduated(graduationTrackerTestData.Diplomas[0], student));
+            }
+            for (int i = 0; i < graduationTrackerTestData.Students.Count; i++)
+            {
+                Assert.AreEqual(actualResult[i], expectedResult[i]);
+            }
+
+        }
+
+
+    }
+
+    class GraduationTrackerTestData : IDatabase
+    {
+        public List<Student> Students => new List<Student>() {
+            new Student
                {
                    Id = 1,
                    Courses = new Course[]
@@ -66,23 +84,50 @@ namespace GraduationTracker.Tests.Unit
                     new Course{Id = 4, Name = "Physichal Education", Mark=40 }
                 }
             }
-
-
-            //tracker.HasGraduated()
         };
-            
-            var graduated = new List<Tuple<bool, STANDING>>();
 
-            foreach(var student in students)
+        public List<Diploma> Diplomas => new List<Diploma>() {
+            new Diploma
             {
-                graduated.Add(tracker.HasGraduated(diploma, student));      
+                Id = 1,
+                Credits = 4,
+                Requirements = new int[] { 100, 102, 103, 104 }
             }
+        };
 
-            
-            Assert.IsFalse(graduated.Any());
-
-        }
-
-
+        public List<Requirement> Requirements => new List<Requirement>() {
+            new Requirement()
+            {
+                Id = 100,
+                Courses = new int[] {2},
+                MinimumMark = 50,
+                Credits = 3,
+                Name = "Requirement 1"
+            },
+            new Requirement()
+            {
+                Id = 102,
+                Courses = new int[] {3},
+                MinimumMark = 60,
+                Credits = 3,
+                Name = "Requirement 2"
+            },
+            new Requirement()
+            {
+                Id = 103,
+                Courses = new int[] {1},
+                MinimumMark = 70,
+                Credits = 3,
+                Name = "Requirement 3"
+            },
+            new Requirement()
+            {
+                Id = 104,
+                Courses = new int[] {4},
+                MinimumMark = 40,
+                Credits = 3,
+                Name = "Requirement 4"
+            }
+        };
     }
 }
