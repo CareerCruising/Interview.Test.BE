@@ -23,17 +23,20 @@
             for (int diplomaReqIdx = 0; diplomaReqIdx < noOfDiplomaReq; diplomaReqIdx++)
             {
                 var requirement = this._requirementDAO.GetItemById(diploma.Requirements[diplomaReqIdx]);
-                noOfReqCourses = requirement.Courses.Length;
-                for (int stdntCourseIdx = 0; stdntCourseIdx < noOfStudentCourses; stdntCourseIdx++)
+                if (requirement != null) 
                 {
-                    for (int reqCourseIdx = 0; reqCourseIdx < noOfReqCourses; reqCourseIdx++)
+                    noOfReqCourses = requirement.Courses.Length;
+                    for (int stdntCourseIdx = 0; stdntCourseIdx < noOfStudentCourses; stdntCourseIdx++)
                     {
-                        if (requirement.Courses[reqCourseIdx] == student.Courses[stdntCourseIdx].Id)
+                        for (int reqCourseIdx = 0; reqCourseIdx < noOfReqCourses; reqCourseIdx++)
                         {
-                            totalMarks += student.Courses[stdntCourseIdx].Mark;
-                            if (student.Courses[stdntCourseIdx].Mark > requirement.MinimumMark)
+                            if (requirement.Courses[reqCourseIdx] == student.Courses[stdntCourseIdx].Id)
                             {
-                                credits += requirement.Credits;
+                                totalMarks += student.Courses[stdntCourseIdx].Mark;
+                                if (student.Courses[stdntCourseIdx].Mark > requirement.MinimumMark)
+                                {
+                                    credits += requirement.Credits;
+                                }
                             }
                         }
                     }
