@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GraduationTracker.Domain.Enums;
 
-namespace GraduationTracker
+namespace GraduationTracker.Domain.Models
 {
     public class Student
     {

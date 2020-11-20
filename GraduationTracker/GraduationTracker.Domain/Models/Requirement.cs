@@ -1,4 +1,4 @@
-﻿namespace GraduationTracker
+﻿namespace GraduationTracker.Domain.Models
 {
     public class Requirement
     {

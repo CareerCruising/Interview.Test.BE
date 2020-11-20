@@ -1,4 +1,4 @@
-﻿namespace GraduationTracker
+﻿namespace GraduationTracker.Domain.Enums
 {
     public enum STANDING
     {
@@ -8,5 +8,4 @@
         Average,
         Remedial
     }
-
 }
