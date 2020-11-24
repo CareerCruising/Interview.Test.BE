@@ -3,8 +3,8 @@ There are now unit tests breaking on the build server and only you have the skil
 
 You should 
 
-  - Clone this repo
-  - Create a branch in your clone
+  - Fork this repo
+  - Create a branch in your fork
   - Fix the broken unit test
   - Make sure there is adequate test coverage.
   - Make sure all code is clean and follows best practices 
