@@ -9,7 +9,7 @@ You should
   - Make sure there is adequate test coverage.
   - Make sure all code is clean and follows best practices 
   
-When finished, make a pull request against the master branch in your clone and send us a link to your repo.
+When finished, make a pull request against the master branch in your fork and send us a link to your repo.
 
 All joking aside, there is no need to finish this in the span of a lunch hour. 
 
@@ -17,6 +17,6 @@ The test is so you can show us what clean code looks like. Clean it up as best y
 
 You will be joining a team that believes in S.O.L.I.D.D principles. We favour declaritive over imperative programming. And we generally use rich service models, with anemic domain models, which looks very much like SOA over REST.
 
-Submissions that follow these principles will be favored since you will fit right in with the current team. If there is a part of the test that blocks you from completing it, then put some comments explaing why it was blocking, and what you would have done if the obstacle was removed.
+Submissions that follow these principles will be favored since you will fit right in with the current team. If there is a part of the test that blocks you from completing it, then put some comments explaining why it was blocking, and what you would have done if the obstacle was removed.
 
 Good Luck!
