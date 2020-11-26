@@ -3,13 +3,13 @@ There are now unit tests breaking on the build server and only you have the skil
 
 You should 
 
-  - Fork this repo
+  - Clone this repo
   - Create a branch in your fork
   - Fix the broken unit test
   - Make sure there is adequate test coverage.
   - Make sure all code is clean and follows best practices 
   
-When finished, make a pull request against the master branch in your fork and send us a link to your repo.
+When finished, make a pull request against the master branch in your clone and send us a link to your repo.
 
 All joking aside, there is no need to finish this in the span of a lunch hour. 
 
