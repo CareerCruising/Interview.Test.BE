@@ -6,6 +6,13 @@ namespace GraduationTracker.Tests
     [TestClass()]
     public class DiplomaTests
     {
+        public DiplomaTests()
+        {
+            RepositoryFactoryBase.RepositoryFactoryName = "RepositoryFactory";
+            RepositoryFactoryBase.RepositoryFactoryNamespace = "GraduationTracker";
+            RepositoryFactoryBase.Refresh();
+        }
+
         [TestMethod()]
         public void DiplomaTest()
         {

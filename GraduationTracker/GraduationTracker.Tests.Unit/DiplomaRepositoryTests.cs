@@ -12,6 +12,10 @@ namespace GraduationTracker.Tests
 
         public DiplomaRepositoryTests()
         {
+            RepositoryFactoryBase.RepositoryFactoryName = "RepositoryFactory";
+            RepositoryFactoryBase.RepositoryFactoryNamespace = "GraduationTracker";
+            RepositoryFactoryBase.Refresh();
+
             this.diplomaRepository = new DiplomaRepository();
         }
 

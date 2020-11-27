@@ -52,7 +52,6 @@
     <Compile Include="DiplomaRepositoryTests.cs" />
     <Compile Include="DiplomaRequirementRepositoryTests.cs" />
     <Compile Include="DiplomaTests.cs" />
-    <Compile Include="GraduationTrackerTests.cs" />
     <Compile Include="Mocks\CourseRepositoryMock.cs" />
     <Compile Include="Mocks\RepositoryFactoryMock.cs" />
     <Compile Include="Mocks\StudentCourseRepositoryMock.cs" />
