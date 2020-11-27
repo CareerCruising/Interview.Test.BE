@@ -79,7 +79,7 @@ namespace GraduationTracker.Tests.Unit
             }
 
             
-            Assert.IsFalse(graduated.Any());
+            Assert.IsTrue(graduated.Any());
 
         }
 
