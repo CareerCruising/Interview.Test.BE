@@ -9,80 +9,71 @@ namespace GraduationTracker.Tests.Unit
     public class GraduationTrackerTests
     {
         [TestMethod]
-        public void TestHasCredits()
+        public void TestHasGraduated()
         {
-            var tracker = new GraduationTracker();
-
-            var diploma = new Diploma
-            {
-                Id = 1,
-                Credits = 4,
-                Requirements = new int[] { 100, 102, 103, 104 }
-            };
-
             var students = new[]
             {
-               new Student
-               {
-                   Id = 1,
-                   Courses = new Course[]
-                   {
-                        new Course{Id = 1, Name = "Math", Mark=95 },
-                        new Course{Id = 2, Name = "Science", Mark=95 },
-                        new Course{Id = 3, Name = "Literature", Mark=95 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=95 }
-                   }
-               },
-               new Student
-               {
-                   Id = 2,
-                   Courses = new Course[]
-                   {
-                        new Course{Id = 1, Name = "Math", Mark=80 },
-                        new Course{Id = 2, Name = "Science", Mark=80 },
-                        new Course{Id = 3, Name = "Literature", Mark=80 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=80 }
-                   }
-               },
-            new Student
-            {
-                Id = 3,
-                Courses = new Course[]
-                {
-                    new Course{Id = 1, Name = "Math", Mark=50 },
-                    new Course{Id = 2, Name = "Science", Mark=50 },
-                    new Course{Id = 3, Name = "Literature", Mark=50 },
-                    new Course{Id = 4, Name = "Physichal Education", Mark=50 }
-                }
-            },
-            new Student
-            {
-                Id = 4,
-                Courses = new Course[]
-                {
-                    new Course{Id = 1, Name = "Math", Mark=40 },
-                    new Course{Id = 2, Name = "Science", Mark=40 },
-                    new Course{Id = 3, Name = "Literature", Mark=40 },
-                    new Course{Id = 4, Name = "Physichal Education", Mark=40 }
-                }
-            }
+               Repository.GetStudent(1),
+               Repository.GetStudent(2),
+               Repository.GetStudent(3),
+               Repository.GetStudent(4),
+            };
 
-
-            //tracker.HasGraduated()
-        };
-            
-            var graduated = new List<Tuple<bool, STANDING>>();
-
-            foreach(var student in students)
-            {
-                graduated.Add(tracker.HasGraduated(diploma, student));      
-            }
-
-            
-            Assert.IsFalse(graduated.Any());
-
+            Assert.IsTrue(students.Where(student =>
+                new GraduationTracker().HasGraduated(Repository.GetDiploma(1), student).Item1 == true).Count() == 3);
         }
 
+        [TestMethod]
+        public void TestHasRequiredCredits()
+        {
+            var student = new Student
+            {
+                Id = 2,
+                Courses = new Course[]
+                {
+                    new Course{Id = 1, Name = "Math", Mark=80 },
+                    new Course{Id = 2, Name = "Science", Mark=80 },
+                    new Course{Id = 3, Name = "Literature", Mark=80 },
+                }
+            };
 
+            Assert.IsTrue(new GraduationTracker().HasGraduated(Repository.GetDiploma(1), student).Item1 == false);
+        }
+
+        [TestMethod]
+        public void TestRequirementDifferentCourseID()
+        {
+            var student = Repository.GetStudent(2);
+            student.Courses.First().Id = 5;
+
+            Assert.IsTrue(new GraduationTracker().HasGraduated(Repository.GetDiploma(1), student).Item1 == false);
+        }
+
+        [TestMethod]
+        public void TestNegativeCourseMark()
+        {
+            var student = Repository.GetStudent(2);
+            student.Courses.First().Mark = -80;
+
+            Assert.IsTrue(new GraduationTracker().HasGraduated(Repository.GetDiploma(1), student) == null);
+        }
+
+        [TestMethod]
+        public void TestNegativeCourseCredit()
+        {
+            //Course Credits property is currently not implemented
+            //if it were implemented this value would be used to check HasGraduated instead of +=1
+            //when tallying credits, allowing for different courses to carry different weights
+            Assert.IsTrue(false);
+        }
+
+        [TestMethod]
+        public void TestNegativeDiplomaCredits()
+        {
+            var diploma = Repository.GetDiploma(1);
+            diploma.Credits = -4;
+
+            Assert.IsTrue(new GraduationTracker().HasGraduated(diploma, Repository.GetStudent(2)) == null);
+        }
     }
 }
