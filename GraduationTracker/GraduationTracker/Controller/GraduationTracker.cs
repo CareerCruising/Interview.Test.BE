@@ -1,34 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GraduationTracker.IGraduationTrackerServices;
+using System;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GraduationTracker
 {
     public partial class GraduationTracker
     {
+        private IRepositoryServices _Repository = new RepositoryServicesController();
         public Tuple<bool, STANDING> HasGraduated(Diploma diploma, Student student)
         {
+            if (student.Courses.Any(x => x.Mark < 0 || x.Mark > 100))
+                return new Tuple<bool, STANDING>(false, STANDING.None);
+           
             var credits = 0;
             var average = 0;
 
-            for (int i = 0; i < diploma.Requirements.Length; i++)
+            foreach (int req in diploma.Requirements)
             {
-                for (int j = 0; j < student.Courses.Length; j++)
+                foreach (Course course in student.Courses)
                 {
-                    var requirement = Repository.GetRequirement(diploma.Requirements[i]);
+                    var requirement = _Repository.GetRequirementByID(req);
 
-                    for (int k = 0; k < requirement.Courses.Length; k++)
+                    int mark = requirement.Courses.Where(x => x == course.Id).Select(x => course.Mark).FirstOrDefault();
+                    average += mark;
+                    
+                    if (course.Mark > requirement.MinimumMark)
                     {
-                        if (requirement.Courses[k] == student.Courses[j].Id)
-                        {
-                            average += student.Courses[j].Mark;
-                            if (student.Courses[j].Mark > requirement.MinimumMark)
-                            {
-                                credits += requirement.Credits;
-                            }
-                        }
+                        credits += requirement.Credits;
                     }
                 }
             }
@@ -51,9 +49,7 @@ namespace GraduationTracker
                 case STANDING.Remedial:
                     return new Tuple<bool, STANDING>(false, standing);
                 case STANDING.Average:
-                    return new Tuple<bool, STANDING>(true, standing);
                 case STANDING.SumaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
                 case STANDING.MagnaCumLaude:
                     return new Tuple<bool, STANDING>(true, standing);
                 default:

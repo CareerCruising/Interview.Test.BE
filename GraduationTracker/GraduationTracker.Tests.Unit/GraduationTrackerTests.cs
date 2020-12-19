@@ -12,11 +12,14 @@ namespace GraduationTracker.Tests.Unit
          * Failing condition
          * check for student fails
          */
+        GraduationTracker tracker;
+        public GraduationTrackerTests()
+        {
+            tracker = new GraduationTracker();
+        }
         [TestMethod]
         public void TestHasNotGraduated()
         {
-            var tracker = new GraduationTracker();
-
             var diploma = new Diploma
             {
                 Id = 1,
@@ -29,7 +32,7 @@ namespace GraduationTracker.Tests.Unit
                 Id = 4,
                 Courses = new Course[]
                 {
-                        new Course{Id = 1, Name = "Math", Mark=40 },
+                        new Course{Id = 1, Name = "Math", Mark=140 },
                         new Course{Id = 2, Name = "Science", Mark=40 },
                         new Course{Id = 3, Name = "Literature", Mark=40 },
                         new Course{Id = 4, Name = "Physichal Education", Mark=40 }
@@ -47,8 +50,6 @@ namespace GraduationTracker.Tests.Unit
         [TestMethod]
         public void TestHasGraduated()
         {
-            var tracker = new GraduationTracker();
-
             var diploma = new Diploma
             {
                 Id = 1,
@@ -70,7 +71,7 @@ namespace GraduationTracker.Tests.Unit
 
             var graduated = tracker.HasGraduated(diploma, student);
 
-            Assert.IsTrue(graduated.Item1 == true);
+            Assert.IsTrue(graduated.Item1 == true, "Test case has failed");
         }
 
         /** 
@@ -80,8 +81,6 @@ namespace GraduationTracker.Tests.Unit
         [TestMethod]
         public void TestOutOfScope()
         {
-            var tracker = new GraduationTracker();
-
             var diploma = new Diploma
             {
                 Id = 1,
@@ -97,9 +96,9 @@ namespace GraduationTracker.Tests.Unit
                     Courses = new Course[]
                     {
                             new Course{Id = 1, Name = "Math", Mark=180 },
-                            new Course{Id = 2, Name = "Science", Mark=180 },
-                            new Course{Id = 3, Name = "Literature", Mark=180 },
-                            new Course{Id = 4, Name = "Physichal Education", Mark=180 }
+                            new Course{Id = 2, Name = "Science", Mark=80 },
+                            new Course{Id = 3, Name = "Literature", Mark=80 },
+                            new Course{Id = 4, Name = "Physichal Education", Mark=80 }
                     }
                 },
                 new Student
@@ -108,9 +107,9 @@ namespace GraduationTracker.Tests.Unit
                     Courses = new Course[]
                     {
                         new Course{Id = 1, Name = "Math", Mark=-80 },
-                        new Course{Id = 2, Name = "Science", Mark=-80 },
-                        new Course{Id = 3, Name = "Literature", Mark=-80 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=-80 }
+                        new Course{Id = 2, Name = "Science", Mark=80 },
+                        new Course{Id = 3, Name = "Literature", Mark=80 },
+                        new Course{Id = 4, Name = "Physichal Education", Mark=80 }
                    }
                 }
             };
