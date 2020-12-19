@@ -1,7 +1,8 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
-using System.Linq;
+using GraduationTracker.Model;
+using GraduationTracker.Model.Enum;
 
 namespace GraduationTracker.Tests.Unit
 {

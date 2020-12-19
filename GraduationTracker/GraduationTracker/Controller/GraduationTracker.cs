@@ -1,4 +1,6 @@
 ﻿using GraduationTracker.IGraduationTrackerServices;
+using GraduationTracker.Model;
+using GraduationTracker.Model.Enum;
 using System;
 using System.Linq;
 

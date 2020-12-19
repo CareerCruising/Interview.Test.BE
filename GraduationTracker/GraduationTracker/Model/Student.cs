@@ -1,4 +1,6 @@
-﻿namespace GraduationTracker
+﻿using GraduationTracker.Model.Enum;
+
+namespace GraduationTracker.Model
 {
     public class Student
     {

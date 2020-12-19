@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using GraduationTracker.Model;
+using System.Linq;
 
 namespace GraduationTracker.DBContext
 {

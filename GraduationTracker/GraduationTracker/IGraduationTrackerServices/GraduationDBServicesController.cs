@@ -1,4 +1,5 @@
 ﻿using GraduationTracker.DBContext;
+using GraduationTracker.Model;
 
 namespace GraduationTracker.IGraduationTrackerServices
 {
