@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 namespace GraduationTracker
 {
     public partial class GraduationTracker
-    {   
-        public Tuple<bool, STANDING>  HasGraduated(Diploma diploma, Student student)
+    {
+        private Repository repository = new Repository();
+        public Tuple<bool, STANDING> HasGraduated(Diploma diploma, Student student)
         {
             var credits = 0;
             var average = 0;
@@ -17,7 +18,7 @@ namespace GraduationTracker
             {
                 for(int j = 0; j < student.Courses.Length; j++)
                 {
-                    var requirement = Repository.GetRequirement(diploma.Requirements[i]);
+                    var requirement = repository.GetRequirement(diploma.Requirements[i]);
 
                     for (int k = 0; k < requirement.Courses.Length; k++)
                     {
