@@ -11,74 +11,66 @@ namespace GraduationTracker.Tests.Unit
         [TestMethod]
         public void TestHasCredits()
         {
-            var tracker = new GraduationTracker();
+            GraduationTracker tracker = new GraduationTracker();
 
-            var diploma = new Diploma
+            // set diploma id
+            int diplomaId = 1;
+
+            // set student ids
+            int[] studentIds = new int[] { 1, 2, 3, 4 };
+
+            List<Tuple<bool, STANDING>> graduated = new List<Tuple<bool, STANDING>>();
+
+            foreach (int studentId in studentIds)
             {
-                Id = 1,
-                Credits = 4,
-                Requirements = new int[] { 100, 102, 103, 104 }
-            };
+                Student student = tracker.GetStudentById(studentId);
+                Diploma diploma = tracker.GetDiplomaById(diplomaId);
 
-            var students = new[]
-            {
-                new Student
-                {
-                    Id = 1,
-                    Courses = new Course[]
-                    {
-                         new Course{Id = 1, Name = "Math", Mark=95 },
-                         new Course{Id = 2, Name = "Science", Mark=95 },
-                         new Course{Id = 3, Name = "Literature", Mark=95 },
-                         new Course{Id = 4, Name = "Physical Education", Mark=95 }
-                    }
-                },
-                new Student
-                {
-                    Id = 2,
-                    Courses = new Course[]
-                    {
-                         new Course{Id = 1, Name = "Math", Mark=80 },
-                         new Course{Id = 2, Name = "Science", Mark=80 },
-                         new Course{Id = 3, Name = "Literature", Mark=80 },
-                         new Course{Id = 4, Name = "Physical Education", Mark=80 }
-                    }
-                },
-                new Student
-                {
-                    Id = 3,
-                    Courses = new Course[]
-                    {
-                        new Course{Id = 1, Name = "Math", Mark=50 },
-                        new Course{Id = 2, Name = "Science", Mark=50 },
-                        new Course{Id = 3, Name = "Literature", Mark=50 },
-                        new Course{Id = 4, Name = "Physical Education", Mark=50 }
-                    }
-                },
-                new Student
-                {
-                    Id = 4,
-                    Courses = new Course[]
-                    {
-                        new Course{Id = 1, Name = "Math", Mark=40 },
-                        new Course{Id = 2, Name = "Science", Mark=40 },
-                        new Course{Id = 3, Name = "Literature", Mark=40 },
-                        new Course{Id = 4, Name = "Physical Education", Mark=40 }
-                    }
-                }
-            };
-
-            var graduated = new List<Tuple<bool, STANDING>>();
-
-            foreach (var student in students)
-            {
+                // add tracking info to graduated list
                 graduated.Add(tracker.HasGraduated(diploma, student));
-            }
 
-            Assert.IsTrue(graduated[0].Item1);
-            Assert.IsTrue(graduated[1].Item1);
-            Assert.IsTrue(graduated[2].Item1);
-            Assert.IsFalse(graduated[3].Item1);
+                Course[] courses = student.Courses;
+
+                // validations with dynamic variables
+                bool isFailed = false;
+                int average = 0;
+
+                foreach (Course course in courses)
+                {
+                    if (course.Mark < 50)
+                    {
+                        isFailed = true;
+                        break;
+                    }
+
+                    average += course.Mark;
+                }
+
+                average = average / courses.Length;
+
+                if (average < 50)
+                {
+                    isFailed = true;
+                }
+
+                // check false if a student failed a course, check true if a student passed all courses
+                if (isFailed)
+                {
+                    Assert.IsFalse(
+                        graduated[graduated.Count - 1].Item1,
+                        "Validation Failed: Graduated while it doesn't fulfill all requirements for the student " +
+                        student.Id
+                        );
+                }
+                else
+                {
+                    Assert.IsTrue(
+                        graduated[graduated.Count - 1].Item1,
+                        "Validation Failed: Not graduated while it fulfill all requirements for the student " +
+                        student.Id
+                        );
+                }
+            }
         }
     }
 }

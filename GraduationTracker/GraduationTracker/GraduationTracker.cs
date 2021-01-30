@@ -10,14 +10,14 @@ namespace GraduationTracker
     {
         private readonly Repository repository = new Repository();
 
-        public Student GetStudent(int id)
+        public Student GetStudentById(int id)
         {
-            return repository.GetStudent(id);
+            return repository.GetStudentById(id);
         }
 
-        public Diploma GetDiploma(int id)
+        public Diploma GetDiplomaById(int id)
         {
-            return repository.GetDiploma(id);
+            return repository.GetDiplomaById(id);
         }
 
         public Tuple<bool, STANDING> HasGraduated(Diploma diploma, Student student)
@@ -42,7 +42,7 @@ namespace GraduationTracker
             // check if one is qualified for graduation
             foreach (int req in diploma.Requirements)
             {
-                Requirement requirement = repository.GetRequirement(req);
+                Requirement requirement = repository.GetRequirementById(req);
 
                 // validation
                 if (requirement == null)

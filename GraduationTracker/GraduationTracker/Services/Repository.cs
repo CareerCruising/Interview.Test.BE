@@ -8,7 +8,7 @@ namespace GraduationTracker
 {
     public class Repository
     {
-        public Student GetStudent(int id)
+        public Student GetStudentById(int id)
         {
             Student[] students = GetStudents();
 
@@ -23,7 +23,7 @@ namespace GraduationTracker
             return null;
         }
 
-        public Diploma GetDiploma(int id)
+        public Diploma GetDiplomaById(int id)
         {
             Diploma[] diplomas = GetDiplomas();
 
@@ -38,7 +38,7 @@ namespace GraduationTracker
             return null;
         }
 
-        public Requirement GetRequirement(int id)
+        public Requirement GetRequirementById(int id)
         {
             Requirement[] requirements = GetRequirements();
 
