@@ -9,7 +9,7 @@ namespace GraduationTracker.Tests.Unit
     public class GraduationTrackerTests
     {
         [TestMethod]
-        public void TestHasCredits()
+        public void TestHasGraduated()
         {
             GraduationTracker tracker = new GraduationTracker();
 
