@@ -8,7 +8,17 @@ namespace GraduationTracker
 {
     public partial class GraduationTracker
     {
-        private Repository repository = new Repository();
+        private readonly Repository repository = new Repository();
+
+        public Student GetStudent(int id)
+        {
+            return repository.GetStudent(id);
+        }
+
+        public Diploma GetDiploma(int id)
+        {
+            return repository.GetDiploma(id);
+        }
 
         public Tuple<bool, STANDING> HasGraduated(Diploma diploma, Student student)
         {
@@ -74,7 +84,7 @@ namespace GraduationTracker
             }
 
             // calculate course average
-            average = average / student.Courses.Length;
+            average /= student.Courses.Length;
 
             // get standing
             STANDING standing = GetStanding(average);
@@ -103,7 +113,7 @@ namespace GraduationTracker
 
         private STANDING GetStanding(int average)
         {
-            STANDING standing = STANDING.None;
+            STANDING standing;
 
             if (average < 50)
             {
@@ -119,7 +129,7 @@ namespace GraduationTracker
             }
             else
             {
-                standing = STANDING.MagnaCumLaude;
+                standing = STANDING.SumaCumLaude;
             }
 
             return standing;
