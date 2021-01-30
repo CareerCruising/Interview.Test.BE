@@ -113,26 +113,22 @@ namespace GraduationTracker
 
         private STANDING GetStanding(int average)
         {
-            STANDING standing;
-
             if (average < 50)
             {
-                standing = STANDING.Remedial;
+                return STANDING.Remedial;
             }
             else if (average < 80)
             {
-                standing = STANDING.Average;
+                return STANDING.Average;
             }
             else if (average < 95)
             {
-                standing = STANDING.MagnaCumLaude;
+                return STANDING.MagnaCumLaude;
             }
             else
             {
-                standing = STANDING.SumaCumLaude;
+                return STANDING.SumaCumLaude;
             }
-
-            return standing;
         }
     }
 }
