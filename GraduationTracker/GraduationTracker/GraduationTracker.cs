@@ -113,6 +113,7 @@ namespace GraduationTracker
 
         private STANDING GetStanding(int average)
         {
+            // standing rules by average
             if (average < 50)
             {
                 return STANDING.Remedial;
