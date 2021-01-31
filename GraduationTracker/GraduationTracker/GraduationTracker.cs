@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GraduationTracker.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +9,7 @@ namespace GraduationTracker
 {
     public partial class GraduationTracker
     {
-        private readonly Repository repository = new Repository();
+        private readonly IRepository repository = new Repository();
 
         public Student GetStudentById(int id)
         {
