@@ -22,6 +22,7 @@ bin/*
 Bin/*
 obj
 Obj
+.vs
 .vs/*
 
 # MSTest test Results
