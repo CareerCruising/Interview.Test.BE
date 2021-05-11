@@ -5,4 +5,13 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Courses\" />
+    <Folder Include="Students\" />
+    <Folder Include="Enums\" />
+    <Folder Include="Diplomas\" />
+    <Folder Include="Requirements\" />
+    <Folder Include="GraduationTrackers\" />
+    <Folder Include="Repositories\" />
+  </ItemGroup>
 </Project>

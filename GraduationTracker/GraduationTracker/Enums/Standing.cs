@@ -1,6 +1,6 @@
 ﻿namespace GraduationTracker
 {
-    public enum STANDING
+    public enum Standing
     {
         None,
         SumaCumLaude,

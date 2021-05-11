@@ -1,88 +1,82 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
+using GraduationTracker.Repositories;
+using GraduationTracker.GraduationTrackers;
+using GraduationTracker.Students;
+using GraduationTracker.Diplomas;
 
 namespace GraduationTracker.Tests.Unit
 {
     [TestClass]
     public class GraduationTrackerTests
     {
+
         [TestMethod]
-        public void TestHasCredits()
+        public void TestStudentsFailedInMath()
         {
-            var tracker = new GraduationTracker();
+            IEnumerable<IStudent> students = Repository.GetStudents();
+            IDiploma diploma = Repository.GetDiploma(1);
 
-            var diploma = new Diploma
-            {
-                Id = 1,
-                Credits = 4,
-                Requirements = new int[] { 100, 102, 103, 104 }
-            };
+            StudentsGraduationTracker tracker = new StudentsGraduationTracker(students, diploma);
 
-            var students = new[]
-            {
-               new Student
-               {
-                   Id = 1,
-                   Courses = new Course[]
-                   {
-                        new Course{Id = 1, Name = "Math", Mark=95 },
-                        new Course{Id = 2, Name = "Science", Mark=95 },
-                        new Course{Id = 3, Name = "Literature", Mark=95 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=95 }
-                   }
-               },
-               new Student
-               {
-                   Id = 2,
-                   Courses = new Course[]
-                   {
-                        new Course{Id = 1, Name = "Math", Mark=80 },
-                        new Course{Id = 2, Name = "Science", Mark=80 },
-                        new Course{Id = 3, Name = "Literature", Mark=80 },
-                        new Course{Id = 4, Name = "Physichal Education", Mark=80 }
-                   }
-               },
-            new Student
-            {
-                Id = 3,
-                Courses = new Course[]
-                {
-                    new Course{Id = 1, Name = "Math", Mark=50 },
-                    new Course{Id = 2, Name = "Science", Mark=50 },
-                    new Course{Id = 3, Name = "Literature", Mark=50 },
-                    new Course{Id = 4, Name = "Physichal Education", Mark=50 }
-                }
-            },
-            new Student
-            {
-                Id = 4,
-                Courses = new Course[]
-                {
-                    new Course{Id = 1, Name = "Math", Mark=40 },
-                    new Course{Id = 2, Name = "Science", Mark=40 },
-                    new Course{Id = 3, Name = "Literature", Mark=40 },
-                    new Course{Id = 4, Name = "Physichal Education", Mark=40 }
-                }
-            }
+            IEnumerable<IStudent> studentsFailedInMath = tracker.GetStudentsFailedInMath();
 
 
-            //tracker.HasGraduated()
-        };
-            
-            var graduated = new List<Tuple<bool, STANDING>>();
-
-            foreach(var student in students)
-            {
-                graduated.Add(tracker.HasGraduated(diploma, student));      
-            }
-
-            
-            Assert.IsFalse(graduated.Any());
+            Assert.IsTrue(studentsFailedInMath.Count() == 1);
 
         }
 
+        [TestMethod]
+        public void TestStudentsApprovedInScience()
+        {
+            IEnumerable<IStudent> students = Repository.GetStudents();
+            IDiploma diploma = Repository.GetDiploma(1);
+
+            StudentsGraduationTracker tracker = new StudentsGraduationTracker(students, diploma);
+
+            IEnumerable<IStudent> studentsFailedInMath = tracker.GetStudentsApprovedInScience();
+
+
+            Assert.IsTrue(studentsFailedInMath.Count() == 2);
+
+        }
+
+
+        [TestMethod]
+        public void TestStudentIsGraduated()
+        {
+
+            IStudent student = Repository.GetStudent(2);
+            IDiploma diploma = Repository.GetDiploma(1);
+            StudentGraduationTracker tracker = new StudentGraduationTracker(student, diploma);
+
+            ResultGraduationTracker result = tracker.StudentHasGraduated();
+
+            Assert.IsTrue(result.IsGraduated);
+            Assert.IsTrue(result.Standing == Standing.MagnaCumLaude);
+            // not too sure about this bussiness rule
+            Assert.IsTrue(result.Credits > 1);
+
+
+        }
+
+
+        public void TestStudentIsNotGraduated()
+        {
+
+            IStudent student = Repository.GetStudent(4);
+            IDiploma diploma = Repository.GetDiploma(1);
+            StudentGraduationTracker tracker = new StudentGraduationTracker(student, diploma);
+
+            ResultGraduationTracker result = tracker.StudentHasGraduated();
+
+            
+
+            Assert.IsFalse(result.IsGraduated);
+            Assert.IsTrue(result.Standing == Standing.Remedial);
+
+        }
 
     }
 }
