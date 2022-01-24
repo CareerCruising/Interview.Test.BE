@@ -1,65 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using GraduationTracker.Models.Interfaces;
+using GraduationTracker.Repositories;
+using GraduationTracker.Services;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GraduationTracker
 {
-    public partial class GraduationTracker
+    public class GraduationTracker
     {   
-        public Tuple<bool, STANDING>  HasGraduated(Diploma diploma, Student student)
+        public bool HasGraduated(IDiploma diploma, IStudent student)
         {
+            var trackerUtility = new TrackerUtility();
             var credits = 0;
-            var average = 0;
-        
-            for(int i = 0; i < diploma.Requirements.Length; i++)
+            var average = 0f;
+            //Adding the sum variable that represents the total marks of courses for a student. 
+            var sum = 0f;
+            var studentCourses = StudentRepository.GetStudentCoursesByStudentId(student.Id);
+            foreach (var requirementId in diploma.Requirements)
             {
-                for(int j = 0; j < student.Courses.Length; j++)
-                {
-                    var requirement = Repository.GetRequirement(diploma.Requirements[i]);
+                var requirement = RequirementRepository.GetRequirementById(requirementId);
+                
+                var course = studentCourses.FirstOrDefault(x => x.Course == requirement.Course);
 
-                    for (int k = 0; k < requirement.Courses.Length; k++)
-                    {
-                        if (requirement.Courses[k] == student.Courses[j].Id)
-                        {
-                            average += student.Courses[j].Mark;
-                            if (student.Courses[j].Mark > requirement.MinimumMark)
-                            {
-                                credits += requirement.Credits;
-                            }
-                        }
-                    }
+                //If student is missing a course from the requirement then return false
+                if (course == null)
+                {
+                    return false;
+                }
+
+                sum += course.Mark;
+                
+                if (course.Mark >= requirement.MinimumMark)
+                {
+                    credits += requirement.Credits;
+                }else
+                {
+                    return false;
                 }
             }
+            
+            average = sum / studentCourses.Length;
 
-            average = average / student.Courses.Length;
+            //In case if we need to get and use the student standing status
+            var standing = trackerUtility.GetSTANDING(average);
 
-            var standing = STANDING.None;
+            return average >= 50;
 
-            if (average < 50)
-                standing = STANDING.Remedial;
-            else if (average < 80)
-                standing = STANDING.Average;
-            else if (average < 95)
-                standing = STANDING.MagnaCumLaude;
-            else
-                standing = STANDING.MagnaCumLaude;
-
-            switch (standing)
-            {
-                case STANDING.Remedial:
-                    return new Tuple<bool, STANDING>(false, standing);
-                case STANDING.Average:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.SumaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.MagnaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
-
-                default:
-                    return new Tuple<bool, STANDING>(false, standing);
-            } 
         }
     }
 }

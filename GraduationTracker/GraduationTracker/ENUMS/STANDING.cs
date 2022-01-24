@@ -1,4 +1,5 @@
-﻿namespace GraduationTracker
+﻿
+namespace GraduationTracker.ENUMS
 {
     public enum STANDING
     {
