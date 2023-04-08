@@ -73,12 +73,13 @@ namespace GraduationTracker.Tests.Unit
             
             var graduated = new List<GraduatedModel>();
 
-            foreach(var student in students)
+            //We should avoid if, while, for, and switch logic in the test cases
+            //But, for this specific scenario we can keep this
+            foreach (var student in students)
             {
                 graduated.Add(tracker.HasGraduated(diploma, student));      
             }
 
-            
             Assert.IsTrue(graduated.Any());
 
         }

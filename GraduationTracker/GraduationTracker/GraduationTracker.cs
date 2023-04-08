@@ -54,11 +54,9 @@ namespace GraduationTracker
             switch (average)
             {
                 case int when average == 0:
-                    graduatedModel.IsGraduated = false;
                     graduatedModel.Standing = STANDING.None;
                     break;
                 case int when average < 50:
-                    graduatedModel.IsGraduated = false;
                     graduatedModel.Standing = STANDING.Remedial;
                     break;
                 case int when average < 80:
