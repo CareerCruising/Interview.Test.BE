@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
-using GraduationTracker.Model;
+using GraduationTracker.Models;
 
 namespace GraduationTracker.Tests.Unit
 {
