@@ -1,27 +1,12 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Collections.Generic;
-using System.Linq;
-using GraduationTracker.Model;
+﻿using GraduationTracker.Models;
 
-namespace GraduationTracker.Tests.Unit
+namespace GraduationTracker.Repositories
 {
-    [TestClass]
-    public class GraduationTrackerTests
+    public class StudentRepository : IStudentRepository
     {
-        [TestMethod]
-        public void TestHasCredits()
+        public Student[] GetStudents()
         {
-            var tracker = new GraduationTracker();
-
-            var diploma = new Diploma
-            {
-                Id = 1,
-                Credits = 4,
-                Requirements = new int[] { 100, 102, 103, 104 }
-            };
-
-            var students = new[]
+            return new[]
             {
                new Student
                {
@@ -68,22 +53,22 @@ namespace GraduationTracker.Tests.Unit
                 }
             }
 
-
-            //tracker.HasGraduated()
-        };
-            
-            var graduated = new List<Tuple<bool, STANDING>>();
-
-            foreach(var student in students)
-            {
-                graduated.Add(tracker.HasGraduated(diploma, student));      
-            }
-
-            
-            Assert.IsFalse(graduated.Any());
-
+            };
         }
 
+        public Student GetStudent(int id)
+        {
+            var students = GetStudents();
+            Student student = null;
 
+            for (int i = 0; i < students.Length; i++)
+            {
+                if (id == students[i].Id)
+                {
+                    student = students[i];
+                }
+            }
+            return student;
+        }
     }
 }
