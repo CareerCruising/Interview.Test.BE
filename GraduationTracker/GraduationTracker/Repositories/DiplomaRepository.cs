@@ -1,18 +1,19 @@
 ﻿using GraduationTracker.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GraduationTracker.Repositories
 {
     public class DiplomaRepository : IDiplomaRepository
     {
-        public Diploma[] GetDiplomas()
+        public IEnumerable<Diploma> GetDiplomas()
         {
-            return new[]
-            {
+            return new List<Diploma>() {
                 new Diploma
                 {
                     Id = 1,
                     Credits = 4,
-                    Requirements = new int[]{100,102,103,104}
+                    Requirements = new int[] { 100, 102, 103, 104 }
                 }
             };
         }
@@ -20,17 +21,7 @@ namespace GraduationTracker.Repositories
         public Diploma GetDiploma(int id)
         {
             var diplomas = GetDiplomas();
-            Diploma diploma = null;
-
-            for (int i = 0; i < diplomas.Length; i++)
-            {
-                if (id == diplomas[i].Id)
-                {
-                    diploma = diplomas[i];
-                }
-            }
-            return diploma;
-
+            return diplomas.ToList().FirstOrDefault(diploma => diploma.Id == id);
         }
     }
 }

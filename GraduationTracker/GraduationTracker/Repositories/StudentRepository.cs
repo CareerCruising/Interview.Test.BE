@@ -1,12 +1,14 @@
 ﻿using GraduationTracker.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GraduationTracker.Repositories
 {
     public class StudentRepository : IStudentRepository
     {
-        public Student[] GetStudents()
+        public IEnumerable<Student> GetStudents()
         {
-            return new[]
+            return new List<Student>()
             {
                new Student
                {
@@ -30,45 +32,35 @@ namespace GraduationTracker.Repositories
                         new Course{Id = 4, Name = "Physichal Education", Mark=80 }
                    }
                },
-            new Student
-            {
-                Id = 3,
-                Courses = new Course[]
+                new Student
                 {
-                    new Course{Id = 1, Name = "Math", Mark=50 },
-                    new Course{Id = 2, Name = "Science", Mark=50 },
-                    new Course{Id = 3, Name = "Literature", Mark=50 },
-                    new Course{Id = 4, Name = "Physichal Education", Mark=50 }
-                }
-            },
-            new Student
-            {
-                Id = 4,
-                Courses = new Course[]
+                    Id = 3,
+                    Courses = new Course[]
+                    {
+                        new Course{Id = 1, Name = "Math", Mark=50 },
+                        new Course{Id = 2, Name = "Science", Mark=50 },
+                        new Course{Id = 3, Name = "Literature", Mark=50 },
+                        new Course{Id = 4, Name = "Physichal Education", Mark=50 }
+                    }
+                },
+                new Student
                 {
-                    new Course{Id = 1, Name = "Math", Mark=40 },
-                    new Course{Id = 2, Name = "Science", Mark=40 },
-                    new Course{Id = 3, Name = "Literature", Mark=40 },
-                    new Course{Id = 4, Name = "Physichal Education", Mark=40 }
+                    Id = 4,
+                    Courses = new Course[]
+                    {
+                        new Course{Id = 1, Name = "Math", Mark=40 },
+                        new Course{Id = 2, Name = "Science", Mark=40 },
+                        new Course{Id = 3, Name = "Literature", Mark=40 },
+                        new Course{Id = 4, Name = "Physichal Education", Mark=40 }
+                    }
                 }
-            }
-
             };
         }
 
         public Student GetStudent(int id)
         {
             var students = GetStudents();
-            Student student = null;
-
-            for (int i = 0; i < students.Length; i++)
-            {
-                if (id == students[i].Id)
-                {
-                    student = students[i];
-                }
-            }
-            return student;
+            return students.ToList().FirstOrDefault(student => student.Id == id);
         }
     }
 }

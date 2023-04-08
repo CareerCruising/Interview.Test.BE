@@ -1,10 +1,11 @@
 ﻿using GraduationTracker.Models;
+using System.Collections.Generic;
 
 namespace GraduationTracker.Repositories
 {
     public interface IDiplomaRepository
     {
-        Diploma[] GetDiplomas();
+        IEnumerable<Diploma> GetDiplomas();
 
         Diploma GetDiploma(int id);
     }

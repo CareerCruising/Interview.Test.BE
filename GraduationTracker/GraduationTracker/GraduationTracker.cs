@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using GraduationTracker.Models;
 using GraduationTracker.Repositories;
 
@@ -8,63 +9,56 @@ namespace GraduationTracker
     {
         private IRequirementRepository requirementRepository { get; set; }
 
-        public GraduationTracker() 
+        public GraduationTracker()
         {
+            // In future we can pass object creation responsibility to dependency resolver
+            // And use Constructor Injection to inject depdnecy for IRequirementRepository.
             requirementRepository = new RequirementRepository();
         }
-       
-        public Tuple<bool, STANDING>  HasGraduated(Diploma diploma, Student student)
-        {
-            var credits = 0;
-            var average = 0;
-        
-            for(int i = 0; i < diploma.Requirements.Length; i++)
-            {
-                for(int j = 0; j < student.Courses.Length; j++)
-                {
-                    var requirement = requirementRepository.GetRequirement(diploma.Requirements[i]);
 
-                    for (int k = 0; k < requirement.Courses.Length; k++)
+        public Tuple<bool, STANDING> HasGraduated(Diploma diploma, Student student)
+        {
+            int credits = 0;
+            int average = 0;
+
+            foreach (int requirementId in diploma.Requirements)
+            {
+                var requirement = requirementRepository.GetRequirement(requirementId);
+
+                foreach (var studentCourse in student.Courses)
+                {
+                    if (requirement.Courses.Contains(studentCourse.Id))
                     {
-                        if (requirement.Courses[k] == student.Courses[j].Id)
+                        average += studentCourse.Mark;
+
+                        if (studentCourse.Mark > requirement.MinimumMark)
                         {
-                            average += student.Courses[j].Mark;
-                            if (student.Courses[j].Mark > requirement.MinimumMark)
-                            {
-                                credits += requirement.Credits;
-                            }
+                            // At this moment we are not using credit in calculation of Graduation.
+                            // However, I'm keeping this calculation if we require it in a future.
+                            // We can make seperate logic for calculating credit.
+                            credits += requirement.Credits;
                         }
                     }
                 }
             }
 
-            average = average / student.Courses.Length;
+            average = student.Courses.ToList().Count > 0 ? average / student.Courses.ToList().Count : 0;
 
-            var standing = STANDING.None;
+            return CalculateStanding(average);
+        }
 
-            if (average < 50)
-                standing = STANDING.Remedial;
-            else if (average < 80)
-                standing = STANDING.Average;
-            else if (average < 95)
-                standing = STANDING.MagnaCumLaude;
-            else
-                standing = STANDING.MagnaCumLaude;
-
-            switch (standing)
+        private Tuple<bool, STANDING> CalculateStanding(int average)
+        {
+            switch (average)
             {
-                case STANDING.Remedial:
-                    return new Tuple<bool, STANDING>(false, standing);
-                case STANDING.Average:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.SumaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
-                case STANDING.MagnaCumLaude:
-                    return new Tuple<bool, STANDING>(true, standing);
-
+                case int when average < 50:
+                    return new Tuple<bool, STANDING>(false, STANDING.Remedial);
+                case int when average < 80:
+                    return new Tuple<bool, STANDING>(true, STANDING.Average);
+                case int when average < 95:
                 default:
-                    return new Tuple<bool, STANDING>(false, standing);
-            } 
+                    return new Tuple<bool, STANDING>(true, STANDING.MagnaCumLaude); ;
+            }
         }
     }
 }

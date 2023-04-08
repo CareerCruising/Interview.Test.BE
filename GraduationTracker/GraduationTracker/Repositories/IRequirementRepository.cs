@@ -1,4 +1,5 @@
 ﻿using GraduationTracker.Models;
+using System.Collections.Generic;
 
 namespace GraduationTracker.Repositories
 {
@@ -6,6 +7,6 @@ namespace GraduationTracker.Repositories
     {
         Requirement GetRequirement(int id);
 
-        Requirement[] GetRequirements();
+        IEnumerable<Requirement> GetRequirements();
     }
 }
