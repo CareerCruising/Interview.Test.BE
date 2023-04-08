@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Collections.Generic;
 using System.Linq;
 using GraduationTracker.Models;
@@ -72,7 +71,7 @@ namespace GraduationTracker.Tests.Unit
             //tracker.HasGraduated()
         };
             
-            var graduated = new List<Tuple<bool, STANDING>>();
+            var graduated = new List<GraduatedModel>();
 
             foreach(var student in students)
             {
@@ -80,10 +79,80 @@ namespace GraduationTracker.Tests.Unit
             }
 
             
-            Assert.IsFalse(graduated.Any());
+            Assert.IsTrue(graduated.Any());
 
         }
 
+
+        [TestMethod]
+        public void TestHasGraduated_WithLowMarks_ReturnsFalseAndRemedialStanding()
+        {
+            var tracker = new GraduationTracker();
+
+            // Arrange
+            var diploma = new Diploma { Requirements = new int[] { 100 } };
+            var student = new Student { Courses = new Course[] { new Course { Id = 1, Name = "Math", Mark = 45 } } };
+
+            // Act
+            var result = tracker.HasGraduated(diploma, student);
+
+            // Assert
+            Assert.AreEqual(false, result.IsGraduated);
+            Assert.AreEqual(STANDING.Remedial, result.Standing);
+        }
+
+        [TestMethod]
+        public void TestHasGraduated_WithAverageMarks_ReturnsTrueAndAverageStanding()
+        {
+            var tracker = new GraduationTracker();
+
+            // Arrange
+            var diploma = new Diploma { Requirements = new int[] { 100 } };
+            var student = new Student { Courses = new Course[] { new Course { Id = 1, Name = "Math", Mark = 75 } } };
+
+            // Act
+            var result = tracker.HasGraduated(diploma, student);
+
+            // Assert
+            Assert.AreEqual(true, result.IsGraduated);
+            Assert.AreEqual(STANDING.Average, result.Standing);
+        }
+
+
+        [TestMethod]
+        public void TestHasGraduated_WithAverageMarks_ReturnsTrueAndMagnaCumLaudeStanding()
+        {
+            var tracker = new GraduationTracker();
+
+            // Arrange
+            var diploma = new Diploma { Requirements = new int[] { 100 } };
+            var student = new Student { Courses = new Course[] { new Course { Id = 1, Name = "Math", Mark = 90 } } };
+
+            // Act
+            var result = tracker.HasGraduated(diploma, student);
+
+            // Assert
+            Assert.AreEqual(true, result.IsGraduated);
+            Assert.AreEqual(STANDING.MagnaCumLaude, result.Standing);
+        }
+
+
+        [TestMethod]
+        public void TestHasGraduated_WithInvalidDiploma_ReturnsFalseAndNoneStanding()
+        {
+            var tracker = new GraduationTracker();
+
+            // Arrange
+            var diploma = new Diploma { Requirements = new int[] { 100 } };
+            var student = new Student { Courses = new Course[] { new Course { Id = 5, Name = "Math", Mark = 90 } } };
+
+            // Act
+            var result = tracker.HasGraduated(diploma, student);
+
+            // Assert
+            Assert.AreEqual(false, result.IsGraduated);
+            Assert.AreEqual(STANDING.None, result.Standing);
+        }
 
     }
 }

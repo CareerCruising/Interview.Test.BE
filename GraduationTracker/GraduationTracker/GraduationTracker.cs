@@ -16,11 +16,10 @@ namespace GraduationTracker
             requirementRepository = new RequirementRepository();
         }
 
-        public Tuple<bool, STANDING> HasGraduated(Diploma diploma, Student student)
+        public GraduatedModel HasGraduated(Diploma diploma, Student student)
         {
             int credits = 0;
             int average = 0;
-
             foreach (int requirementId in diploma.Requirements)
             {
                 var requirement = requirementRepository.GetRequirement(requirementId);
@@ -42,23 +41,37 @@ namespace GraduationTracker
                 }
             }
 
-            average = student.Courses.ToList().Count > 0 ? average / student.Courses.ToList().Count : 0;
+            int courseCount = student.Courses.ToList().Count;
+
+            average = courseCount > 0 ? average / courseCount : 0;
 
             return CalculateStanding(average);
         }
 
-        private Tuple<bool, STANDING> CalculateStanding(int average)
+        private GraduatedModel CalculateStanding(int average)
         {
+            GraduatedModel graduatedModel = new GraduatedModel();
             switch (average)
             {
+                case int when average == 0:
+                    graduatedModel.IsGraduated = false;
+                    graduatedModel.Standing = STANDING.None;
+                    break;
                 case int when average < 50:
-                    return new Tuple<bool, STANDING>(false, STANDING.Remedial);
+                    graduatedModel.IsGraduated = false;
+                    graduatedModel.Standing = STANDING.Remedial;
+                    break;
                 case int when average < 80:
-                    return new Tuple<bool, STANDING>(true, STANDING.Average);
+                    graduatedModel.IsGraduated = true;
+                    graduatedModel.Standing = STANDING.Average;
+                    break;
                 case int when average < 95:
                 default:
-                    return new Tuple<bool, STANDING>(true, STANDING.MagnaCumLaude); ;
+                    graduatedModel.IsGraduated = true;
+                    graduatedModel.Standing = STANDING.MagnaCumLaude;
+                    break;
             }
+            return graduatedModel;
         }
     }
 }
